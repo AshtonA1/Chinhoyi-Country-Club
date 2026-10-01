@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Chapman Golf Club"
+description = "A premium, mobile-first golf club website and digital management platform front-end for GreyCode Technologies, showcasing the Chapman course, tee-time booking, membership, events, facilities and a reusable hole-detail experience."
+version = "1.0.0"
+id = "artifacts/chapman-golf-club"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23692
+
+[services.development]
+run = "pnpm --filter @workspace/chapman-golf-club run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/chapman-golf-club", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/chapman-golf-club/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23692"
+BASE_PATH = "/"
