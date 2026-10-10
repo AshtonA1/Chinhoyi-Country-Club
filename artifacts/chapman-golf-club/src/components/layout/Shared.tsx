@@ -74,7 +74,7 @@ export function PageIntro({
 }
 
 export function StatStrip({
-  items = [['18', 'Holes'], ['71', 'Par'], ['6,291', 'Metres'], ['1968', 'Established']],
+  items = [['18', 'Holes'], ['72', 'Par'], ['6,500', 'Metres', 'Men'], ['5,482', 'Metres', 'Women'], ['1968', 'Established']],
 }: { items?: string[][] }) {
   return (
     <div className="grid grid-cols-2 border-y border-[#12372A]/15 md:grid-cols-4">
@@ -109,7 +109,7 @@ export function LocationBand() {
           <MapPin className="text-[#C8A951]" size={24} />
           <p className="mt-5 leading-7 text-white/80">{club.address}</p>
           <p className="mt-6 text-sm text-white/60">
-            35 minutes from the international airport. 12 minutes from the city centre.
+            15 minutes from the Chinhoyi University. 5 minutes from the city centre.
           </p>
           <ButtonLink href="/contact" className="mt-8">PLAN YOUR VISIT</ButtonLink>
         </div>

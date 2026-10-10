@@ -133,7 +133,7 @@ export default function Home() {
               <div>
                 <p className="font-mono-club text-[9px] tracking-[.18em] text-[#C8A951]">COURSE NOTE</p>
                 <p className="mt-4 font-display text-3xl leading-tight">"A course that gives you something new on every walk."</p>
-                <p className="mt-6 text-xs leading-6 text-white/55">— Peter Matkovich, course architect</p>
+                <p className="mt-6 text-xs leading-6 text-white/55">— ASHTON MBEDZI, course architect</p>
               </div>
               <Link href="/course" className="mt-10 flex items-center gap-2 text-[10px] font-bold tracking-[.14em] text-[#C8A951]" data-testid="link-course-note">
                 READ THE COURSE NOTES <ArrowUpRight size={14} />
@@ -176,13 +176,16 @@ export default function Home() {
               The details<br /><em>make the day.</em>
             </h2>
             <p className="mt-7 text-sm leading-7 text-[#5d6b63]">
-              A place for the whole day, thoughtfully made. Fresh lunches from our kitchen, a quiet gym, a pool for the family, and a team who remembers how you take your coffee.
+              A place for the whole day, thoughtfully made. Fresh lunches from our kitchen, a quiet gym, lots of games and sports for the family, and a team who remembers how you like your drink.
             </p>
             <div className="mt-8 grid grid-cols-2 gap-y-4 text-xs text-[#2E6B4E]">
-              <span className="flex items-center gap-2"><Waves size={15} /> 25M SWIMMING POOL</span>
+              <span className="flex items-center gap-2"><Waves size={15} /> SWIMMING POOL</span>
               <span className="flex items-center gap-2"><Dumbbell size={15} /> FITNESS STUDIO</span>
+              <span className="flex items-center gap-2"><Car size={15} /> SQUASH</span>
+              <span className="flex items-center gap-2"><Car size={15} /> BOWLING</span>
               <span className="flex items-center gap-2"><TreePine size={15} /> INDIGENOUS GARDENS</span>
-              <span className="flex items-center gap-2"><Car size={15} /> VALET PARKING</span>
+              <span className="flex items-center gap-2"><Car size={15} /> PARKING</span>
+              <span className="flex items-center gap-2"><Car size={15} /> CAR WASH</span>
             </div>
             <ButtonLink href="/facilities" dark className="mt-9">DISCOVER FACILITIES</ButtonLink>
           </div>
@@ -200,7 +203,7 @@ export default function Home() {
               <p className="mt-5 font-display text-3xl leading-tight text-[#12372A]">
                 "Chinhoyi is the place our family comes to exhale. Every visit feels like coming home."
               </p>
-              <p className="mt-5 font-mono-club text-[9px] tracking-[.15em] text-[#5d6b63]">— TARIRO M., MEMBER SINCE 2012</p>
+              <p className="mt-5 font-mono-club text-[9px] tracking-[.15em] text-[#5d6b63]">— ASHTON M., MEMBER SINCE 2012</p>
               <ButtonLink href="/membership" dark className="mt-9">MEMBERSHIP AT CHINHOYI</ButtonLink>
             </div>
           </div>

@@ -11,7 +11,7 @@ export default function Course() {
       <PageIntro
         eyebrow="THE COURSE · 18 HOLES"
         title="A conversation with the land."
-        copy="Designed by Peter Matkovich, the course moves through indigenous woodland, open grassland and quiet folds of terrain."
+        copy="Designed by Ashton Mbedzi, the course moves through indigenous woodland, open grassland and quiet folds of terrain."
         image={images.fairway}
       />
       <main className="mx-auto max-w-[1480px] px-5 py-20 md:px-10 md:py-28">
