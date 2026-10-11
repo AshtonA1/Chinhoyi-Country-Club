@@ -467,3 +467,15 @@ export const golfInfo = {
   ],
   hazardsOverview: [] as string[],
 };
+
+/**
+ * Legacy shape (men's tees, flat par/metres/stroke) for any layout component that
+ * still reads `holes` directly, such as Shared.tsx. Fixed defaults only; new code
+ * should use `useHoles()` from '@/lib/club-data' so admin edits show up.
+ */
+export const holes = defaultHoles.map((h) => ({
+  ...h,
+  par: h.men.par,
+  metres: h.men.metres,
+  stroke: h.men.stroke,
+}));

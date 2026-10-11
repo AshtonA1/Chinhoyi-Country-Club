@@ -16,7 +16,7 @@ export default function AdminGallery() {
         eyebrow="ADMIN PORTAL / GALLERY & STORIES"
         title="Set the visual tone."
         copy="Curate published photography and moderate member-submitted Club Stories before they go live."
-        action={<button onClick={() => window.alert('Image upload to the published gallery lands in a future update.')} className="inline-flex items-center gap-2 bg-[#12372A] px-5 py-4 text-[10px] font-bold tracking-[.14em] text-[#F7F5EF] hover:bg-[#2E6B4E]"><Plus size={14} /> UPLOAD IMAGE</button>}
+        action={<button disabled title="Not available in the demo" className="inline-flex items-center gap-2 bg-[#12372A] px-5 py-4 text-[10px] font-bold tracking-[.14em] text-[#F7F5EF] disabled:opacity-40"><Plus size={14} /> UPLOAD IMAGE</button>}
       />
       <div className="mt-8 grid gap-3 md:grid-cols-3">
         <PortalStat label="PUBLISHED IMAGES" value={String(galleryItems.length)} note="Live on the public gallery" />

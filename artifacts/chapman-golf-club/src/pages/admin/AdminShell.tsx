@@ -1,10 +1,11 @@
 import { type ReactNode, useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import {
-  Activity, Bell, CalendarCheck, CalendarDays, ClipboardList, Compass, CreditCard, Image as ImageIcon,
-  LayoutDashboard, LogOut, Menu, Search, Settings, ShieldCheck, ShoppingBag, Users, X, BarChart3,
+  Activity, CalendarCheck, CalendarDays, ClipboardList, Compass, CreditCard, Image as ImageIcon,
+  LayoutDashboard, LogOut, Menu, Settings, ShieldCheck, Shapes, Users, X, BarChart3,
 } from 'lucide-react';
-import { SectionLabel } from '@/components/layout/Shared';
+import { SampleChip } from '@/components/layout/Portal';
+import { sampleAdmin } from '@/data/sample';
 
 export const adminNav = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -14,13 +15,18 @@ export const adminNav = [
   { label: 'Events', href: '/admin/events', icon: CalendarDays },
   { label: 'Memberships', href: '/admin/memberships', icon: ShieldCheck },
   { label: 'Gallery & stories', href: '/admin/gallery', icon: ImageIcon },
-  { label: 'Pro shop', href: '/admin/pro-shop', icon: ShoppingBag },
+  { label: 'Facilities', href: '/admin/facilities', icon: Shapes },
   { label: 'Payments', href: '/admin/payments', icon: CreditCard },
   { label: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { label: 'Users & roles', href: '/admin/users', icon: Users },
   { label: 'Activity logs', href: '/admin/activity', icon: Activity },
-  { label: 'Settings', href: '/admin/settings', icon: Settings },
+  { label: 'Fees & settings', href: '/admin/settings', icon: Settings },
 ];
+
+function greeting(): string {
+  const hour = new Date(Date.now() + 2 * 3_600_000).getUTCHours(); // club time, UTC+2
+  return hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+}
 
 export function AdminShell({ children }: { children: ReactNode }) {
   const [location] = useLocation();
@@ -30,7 +36,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col bg-[#17201C] px-5 py-6 text-[#F7F5EF] md:flex">
         <div className="flex items-center justify-between px-2">
           <Link href="/" className="font-display text-2xl">Chinhoyi <em>HQ</em></Link>
-          <span className="rounded-full border border-[#C8A951]/40 px-2 py-1 font-mono-club text-[8px] text-[#C8A951]">GCT</span>
+          <span className="rounded-full border border-[#C8A951]/40 px-2 py-1 font-mono-club text-[8px] text-[#C8A951]">ADMIN</span>
         </div>
         <div className="mt-8 border-y border-white/10 px-2 py-4">
           <p className="font-mono-club text-[9px] tracking-[.14em] text-[#C8A951]">OPERATIONS</p>
@@ -54,16 +60,12 @@ export function AdminShell({ children }: { children: ReactNode }) {
       <div className="md:pl-64">
         <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-[#12372A]/10 bg-[#f4f4ee]/95 px-5 backdrop-blur md:px-10">
           <div>
-            <p className="font-mono-club text-[9px] tracking-[.17em] text-[#5d6b63]">GCT CLUB OS / ADMIN PORTAL</p>
-            <p className="mt-1 font-display text-2xl text-[#12372A]">Good morning, Sarah.</p>
+            <p className="font-mono-club text-[9px] tracking-[.17em] text-[#5d6b63]">CHINHOYI COUNTRY CLUB / ADMIN</p>
+            <p className="mt-1 font-display text-2xl text-[#12372A]">{greeting()}.</p>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={() => window.alert('Global search across bookings, members and events lands in a future update.')} className="grid h-10 w-10 place-items-center border border-[#12372A]/15 hover:border-[#2E6B4E]" aria-label="Search"><Search size={16} /></button>
-            <button onClick={() => window.alert('3 unread: new booking, payment received, membership enquiry.')} className="relative grid h-10 w-10 place-items-center border border-[#12372A]/15 hover:border-[#2E6B4E]" aria-label="Notifications">
-              <Bell size={16} /><span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#C8A951]" />
-            </button>
             <span className="hidden border-l border-[#12372A]/10 pl-3 text-xs md:block">
-              <strong className="block text-[#12372A]">Sarah Dube</strong><small className="text-[#5d6b63]">Super Admin</small>
+              <strong className="block text-[#12372A]">{sampleAdmin.name}</strong><small className="flex items-center gap-1 text-[#5d6b63]">{sampleAdmin.title} <SampleChip /></small>
             </span>
             <button className="grid h-10 w-10 place-items-center border border-[#12372A]/15 md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle admin menu">
               {menuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -87,29 +89,4 @@ export function AdminShell({ children }: { children: ReactNode }) {
   );
 }
 
-export function PortalHeading({
-  eyebrow, title, copy, action,
-}: { eyebrow: string; title: string; copy?: string; action?: ReactNode }) {
-  return (
-    <div className="flex flex-col justify-between gap-6 border-b border-[#12372A]/10 pb-8 md:flex-row md:items-end">
-      <div>
-        <SectionLabel>{eyebrow}</SectionLabel>
-        <h1 className="font-display mt-3 text-5xl leading-[.9] text-[#12372A] md:text-7xl">{title}</h1>
-        {copy && <p className="mt-4 max-w-xl text-sm leading-7 text-[#5d6b63]">{copy}</p>}
-      </div>
-      {action}
-    </div>
-  );
-}
-
-export function PortalStat({
-  label, value, note, dark = false,
-}: { label: string; value: string; note?: string; dark?: boolean }) {
-  return (
-    <div className={`border p-5 ${dark ? 'border-white/15 bg-[#12372A] text-[#F7F5EF]' : 'border-[#12372A]/10 bg-[#F7F5EF] text-[#12372A]'}`}>
-      <p className={`font-mono-club text-[9px] tracking-[.15em] ${dark ? 'text-[#C8A951]' : 'text-[#5d6b63]'}`}>{label}</p>
-      <p className="mt-4 font-display text-4xl">{value}</p>
-      {note && <p className={`mt-2 text-xs ${dark ? 'text-white/50' : 'text-[#5d6b63]'}`}>{note}</p>}
-    </div>
-  );
-}
+export { PortalHeading, PortalStat } from '@/components/layout/Portal';
