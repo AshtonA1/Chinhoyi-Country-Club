@@ -256,6 +256,8 @@ export const ROLES: RoleDefinition[] = [
 export const club = {
   name: 'Chinhoyi Country Club',
   shortCode: 'CCC',
+  /** Club badge (circular PNG in /public/images). */
+  logo: '/images/club-logo.png',
   legalFooterName: 'CHINHOYI COUNTRY CLUB',
   /** Unknown until the club confirms it; do not invent a founding year. */
   establishedYear: null as number | null,
@@ -467,15 +469,3 @@ export const golfInfo = {
   ],
   hazardsOverview: [] as string[],
 };
-
-/**
- * Legacy shape (men's tees, flat par/metres/stroke) for any layout component that
- * still reads `holes` directly, such as Shared.tsx. Fixed defaults only; new code
- * should use `useHoles()` from '@/lib/club-data' so admin edits show up.
- */
-export const holes = defaultHoles.map((h) => ({
-  ...h,
-  par: h.men.par,
-  metres: h.men.metres,
-  stroke: h.men.stroke,
-}));

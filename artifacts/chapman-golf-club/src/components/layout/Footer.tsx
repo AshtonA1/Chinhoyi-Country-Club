@@ -4,14 +4,15 @@ import { Brand } from './Brand';
 import { club, navItems, whatsappLink } from '@/data/club';
 
 export function Footer() {
+  const wa = whatsappLink();
   return (
     <footer className="bg-[#12372A] text-[#F7F5EF]">
       <div className="mx-auto grid max-w-[1480px] gap-12 px-5 py-16 md:grid-cols-12 md:px-10 md:py-20">
         <div className="md:col-span-5">
           <Brand light />
           <p className="mt-8 max-w-sm text-sm leading-7 text-white/60">
-            A considered place for golf, conversation and the good fortune of being outdoors. Borrowed from
-            Zimbabwe, built for the long view.
+            Golf, sport and good company in {club.city}, {club.country}. An 18-hole course, a pool, a gym, courts,
+            a restaurant and a bar, all in one place.
           </p>
           <div className="mt-8 flex gap-3">
             <a
@@ -30,16 +31,18 @@ export function Footer() {
             >
               f
             </a>
-            <a
-              href={whatsappLink()}
-              target="_blank"
-              rel="noreferrer"
-              className="grid h-9 w-9 place-items-center border border-white/20 transition-colors hover:border-[#C8A951] hover:text-[#C8A951]"
-              aria-label="WhatsApp"
-              data-testid="link-footer-whatsapp"
-            >
-              <MessageCircle size={15} />
-            </a>
+            {wa && (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noreferrer"
+                className="grid h-9 w-9 place-items-center border border-white/20 transition-colors hover:border-[#C8A951] hover:text-[#C8A951]"
+                aria-label="WhatsApp"
+                data-testid="link-footer-whatsapp"
+              >
+                <MessageCircle size={15} />
+              </a>
+            )}
           </div>
         </div>
         <div className="md:col-span-2">
@@ -70,21 +73,23 @@ export function Footer() {
             <br />
             {club.email}
           </p>
-          <a
-            href={whatsappLink()}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-4 inline-flex items-center gap-2 text-sm text-[#C8A951] hover:text-[#e3c86b]"
-            data-testid="link-footer-whatsapp-text"
-          >
-            <MessageCircle size={14} /> Chat on WhatsApp
-          </a>
+          {wa && (
+            <a
+              href={wa}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 inline-flex items-center gap-2 text-sm text-[#C8A951] hover:text-[#e3c86b]"
+              data-testid="link-footer-whatsapp-text"
+            >
+              <MessageCircle size={14} /> Chat on WhatsApp
+            </a>
+          )}
         </div>
       </div>
       <div className="border-t border-white/10 px-5 py-5 md:px-10">
         <div className="mx-auto flex max-w-[1480px] flex-col justify-between gap-2 text-[10px] tracking-[.12em] text-white/40 sm:flex-row">
           <span>© {new Date().getFullYear()} {club.legalFooterName}</span>
-          <span>A GREYCODE TECHNOLOGIES REFERENCE EXPERIENCE</span>
+          <span>WEBSITE BY GREYCODE TECHNOLOGIES</span>
         </div>
       </div>
     </footer>

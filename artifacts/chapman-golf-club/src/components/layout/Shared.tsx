@@ -1,7 +1,10 @@
 import { type ReactNode, useEffect } from 'react';
 import { Link } from 'wouter';
 import { ArrowUpRight, MapPin } from 'lucide-react';
-import { club, holes } from '@/data/club';
+import { club } from '@/data/club';
+import { useCourseConfig, useHoles } from '@/lib/club-data';
+import { formatNumber } from '@/lib/format';
+import { teeTotals } from '@/lib/scorecard';
 import { Header } from './Header';
 
 export function usePageMeta(title: string, description: string) {
@@ -56,6 +59,7 @@ export function HoleDiagram() {
 export function PageIntro({
   eyebrow, title, copy, image,
 }: { eyebrow: string; title: string; copy: string; image: string }) {
+  const { items: holes } = useHoles();
   return (
     <section className="relative flex min-h-[560px] items-end overflow-hidden bg-[#12372A] pb-16 pt-40 text-[#F7F5EF] md:min-h-[650px] md:pb-24">
       <Header />
@@ -67,18 +71,26 @@ export function PageIntro({
           <h1 className="font-display mt-5 text-6xl leading-[.9] md:text-8xl">{title}</h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-white/75 md:text-lg">{copy}</p>
         </div>
-        {holes.some((hole) => hole.name === title) && <HoleDiagram />}
+        {holes.some((hole) => hole.name && hole.name === title) && <HoleDiagram />}
       </div>
     </section>
   );
 }
 
-export function StatStrip({
-  items = [['18', 'Holes'], ['72', 'Par'], ['6,500', 'Metres', 'Men'], ['5,482', 'Metres', 'Women'], ['1968', 'Established']],
-}: { items?: string[][] }) {
+export function StatStrip({ items }: { items?: string[][] }) {
+  const { items: holes } = useHoles();
+  const { value: course } = useCourseConfig();
+  const men = teeTotals(holes, course, 'men');
+  const ladies = teeTotals(holes, course, 'ladies');
+  const shown = items ?? [
+    [String(holes.length), 'Holes'],
+    [String(men.par.total), 'Par'],
+    [formatNumber(men.metres.total), "Metres (men)"],
+    [formatNumber(ladies.metres.total), "Metres (ladies)"],
+  ];
   return (
     <div className="grid grid-cols-2 border-y border-[#12372A]/15 md:grid-cols-4">
-      {items.map(([value, label], i) => (
+      {shown.map(([value, label], i) => (
         <div
           key={label}
           className={`px-5 py-7 md:px-8 md:py-9 ${i % 2 ? 'border-l border-[#12372A]/15 md:border-l-0' : ''} ${i > 1 ? 'border-t border-[#12372A]/15 md:border-t-0' : ''} ${i > 0 ? 'md:border-l md:border-[#12372A]/15' : ''}`}
@@ -102,15 +114,12 @@ export function LocationBand() {
         <div className="md:col-span-6">
           <SectionLabel light>COME AND FIND US</SectionLabel>
           <h2 className="font-display mt-5 text-5xl leading-[.92] md:text-7xl">
-            The quiet side<br /><em>of {club.city}.</em>
+            Find us in<br /><em>{club.city}.</em>
           </h2>
         </div>
         <div className="md:col-span-4 md:col-start-8">
           <MapPin className="text-[#C8A951]" size={24} />
           <p className="mt-5 leading-7 text-white/80">{club.address}</p>
-          <p className="mt-6 text-sm text-white/60">
-            15 minutes from the Chinhoyi University. 5 minutes from the city centre.
-          </p>
           <ButtonLink href="/contact" className="mt-8">PLAN YOUR VISIT</ButtonLink>
         </div>
       </div>
