@@ -3,6 +3,7 @@ import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { DemoBanner } from '@/components/layout/DemoBanner';
 
 import Home from '@/pages/Home';
 import About from '@/pages/About';
@@ -86,6 +87,7 @@ function App() {
           <Router />
         </WouterRouter>
         <Toaster />
+        <DemoBanner />
       </TooltipProvider>
     </QueryClientProvider>
   );

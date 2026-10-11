@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, CircleCheck, MoreHorizontal, Plus } from 'lucide-react';
 import { AdminShell, PortalHeading } from './AdminShell';
-import { bookingConfig } from '@/data/club';
+import { useBookingSettings } from '@/lib/club-data';
 
 function shiftDate(iso: string, days: number): string {
   const d = new Date(iso);
@@ -12,7 +12,8 @@ function shiftDate(iso: string, days: number): string {
 export default function AdminTeeSheet() {
   const [date, setDate] = useState('2026-09-14');
   const [added, setAdded] = useState(false);
-  const slots = bookingConfig.timeSlots;
+  const { value: bookingSettings } = useBookingSettings();
+  const slots = bookingSettings.slots;
   return (
     <AdminShell>
       <PortalHeading

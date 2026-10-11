@@ -3,12 +3,31 @@ import { CircleCheck, ImagePlus, X } from 'lucide-react';
 import type { ClubStory } from '@/data/club';
 import { useLocalCollection } from '@/lib/local-store';
 
-function fileToDataUrl(file: File): Promise<string> {
+/** Shrinks a photo to at most 1000px and re-encodes as JPEG so it fits in browser storage. */
+function resizeImage(file: File, maxSide = 1000): Promise<string> {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(img.width * scale));
+      canvas.height = Math.max(1, Math.round(img.height * scale));
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        URL.revokeObjectURL(url);
+        reject(new Error('Canvas unavailable'));
+        return;
+      }
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL('image/jpeg', 0.8));
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Could not read image'));
+    };
+    img.src = url;
   });
 }
 
@@ -19,16 +38,23 @@ export function StorySubmissionForm({ onClose }: { onClose: () => void }) {
   const [description, setDescription] = useState('');
   const [photoDataUrl, setPhotoDataUrl] = useState<string | undefined>(undefined);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   async function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setPhotoDataUrl(await fileToDataUrl(file));
+    try {
+      setPhotoDataUrl(await resizeImage(file));
+      setError('');
+    } catch {
+      setPhotoDataUrl(undefined);
+      setError('That photo could not be used. Try a different image.');
+    }
   }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    add({
+    const saved = add({
       id: crypto.randomUUID(),
       memberName,
       score,
@@ -37,6 +63,10 @@ export function StorySubmissionForm({ onClose }: { onClose: () => void }) {
       submittedAt: new Date().toISOString(),
       status: 'pending',
     });
+    if (!saved) {
+      setError('Your browser could not store the story (storage is full or blocked). Try again without a photo.');
+      return;
+    }
     setSubmitted(true);
   }
 
@@ -82,6 +112,7 @@ export function StorySubmissionForm({ onClose }: { onClose: () => void }) {
                 <input type="file" accept="image/*" onChange={handlePhoto} className="hidden" data-testid="input-story-photo" />
               </label>
             </div>
+            {error && <p role="alert" className="text-xs text-[#9b2c2c]">{error}</p>}
             <button type="submit" className="bg-[#C8A951] py-4 text-[10px] font-bold tracking-[.15em] text-[#17201C] hover:bg-[#e3c86b]" data-testid="button-submit-story">
               SUBMIT FOR REVIEW
             </button>

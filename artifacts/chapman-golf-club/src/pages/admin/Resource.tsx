@@ -4,7 +4,7 @@ import {
   Search, Settings, ShieldCheck, ShoppingBag, SlidersHorizontal,
 } from 'lucide-react';
 import { AdminShell, PortalHeading, PortalStat } from './AdminShell';
-import { holes } from '@/data/club';
+import { defaultHoles as holes } from '@/data/club';
 
 type ResourceCopy = {
   eyebrow: string; title: string; copy: string;
@@ -22,8 +22,8 @@ const adminResourceCopy: Record<string, ResourceCopy> = {
   course: {
     eyebrow: 'ADMIN PORTAL / COURSE & HOLES', title: 'Shape the course story.',
     copy: 'Manage the 18-hole data that powers the public course experience — par, distance in metres, stroke index, description, hazards and pro tip per hole.',
-    stats: [['HOLES', String(holes.length), 'Published'], ['COURSE PAR', String(holes.reduce((s, h) => s + h.par, 0)), 'From tee data'], ['LAST UPDATED', '12 Jun', 'By S. Dube']],
-    rows: holes.slice(0, 3).map((h) => [String(h.number).padStart(2, '0'), h.name, `PAR ${h.par} · ${h.metres} M`, 'Published']) as [string, string, string, string][],
+    stats: [['HOLES', String(holes.length), 'Published'], ['COURSE PAR', String(holes.reduce((s, h) => s + h.men.par, 0)), 'From tee data'], ['LAST UPDATED', '12 Jun', 'By S. Dube']],
+    rows: holes.slice(0, 3).map((h) => [String(h.number).padStart(2, '0'), h.name || `Hole ${h.number}`, `PAR ${h.men.par} · ${h.men.metres} M`, 'Published']) as [string, string, string, string][],
   },
   events: {
     eyebrow: 'ADMIN PORTAL / EVENTS', title: 'Give the club a reason.',
