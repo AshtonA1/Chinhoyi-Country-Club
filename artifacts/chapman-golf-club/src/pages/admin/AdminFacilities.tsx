@@ -58,7 +58,7 @@ export default function AdminFacilities() {
         title="Everything on the grounds."
         copy="Add, edit, hide or remove facilities. Use the access/price line for things like “Included with membership” or “$5 per wash”."
         action={canWrite && (
-          <button onClick={() => { setDraft(blank()); setIsNew(true); setError(''); }} className="inline-flex items-center gap-2 bg-[#12372A] px-5 py-4 text-[10px] font-bold tracking-[.14em] text-[#F7F5EF] hover:bg-[#2E6B4E]" data-testid="button-add-facility">
+          <button onClick={() => { setDraft(blank()); setIsNew(true); setError(''); }} className="inline-flex items-center gap-2 bg-club-green px-5 py-4 text-[10px] font-bold tracking-[.14em] text-club-white hover:bg-club-ink" data-testid="button-add-facility">
             <Plus size={14} /> ADD FACILITY
           </button>
         )}
@@ -80,8 +80,8 @@ export default function AdminFacilities() {
             </div>
             <div className="mt-4"><AreaField label="Description" value={draft.text} onChange={(v) => set({ text: v })} /></div>
             <div className="mt-4 flex flex-wrap items-center gap-4">
-              <label className="inline-flex cursor-pointer items-center gap-2 border border-dashed border-[#cfd4cd] px-4 py-3 text-xs text-[#5d6b63] hover:border-[#2E6B4E]">
-                <ImagePlus size={16} className="text-[#2E6B4E]" /> {draft.image ? 'Replace photo' : 'Add a photo (optional)'}
+              <label className="inline-flex cursor-pointer items-center gap-2 border border-dashed border-club-ink/20 px-4 py-3 text-xs text-club-ink/70 hover:border-club-green">
+                <ImagePlus size={16} className="text-club-green" /> {draft.image ? 'Replace photo' : 'Add a photo (optional)'}
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => void onPhoto(e.target.files?.[0])} />
               </label>
               {draft.image && (
@@ -91,7 +91,7 @@ export default function AdminFacilities() {
                 </>
               )}
             </div>
-            {error && <p role="alert" className="mt-4 text-xs text-[#9b2c2c]">{error}</p>}
+            {error && <p role="alert" className="mt-4 text-xs text-club-alert">{error}</p>}
             <div className="mt-5 flex flex-wrap gap-3">
               <PrimaryButton onClick={save} testId="button-save-facility">SAVE FACILITY</PrimaryButton>
               <GhostButton onClick={() => { setDraft(null); setError(''); }}>CANCEL</GhostButton>
@@ -102,11 +102,11 @@ export default function AdminFacilities() {
 
       <div className="mt-6 grid gap-2">
         {items.map((f, i) => (
-          <div key={f.id} className="flex flex-wrap items-center gap-4 border border-[#12372A]/10 bg-[#F7F5EF] p-4">
-            <FacilityIcon icon={f.icon} size={22} className="shrink-0 text-[#2E6B4E]" />
+          <div key={f.id} className="flex flex-wrap items-center gap-4 border border-club-ink/10 bg-club-white p-4">
+            <FacilityIcon icon={f.icon} size={22} className="shrink-0 text-club-green" />
             <div className="min-w-40 flex-1">
-              <p className="font-medium text-[#12372A]">{f.title} {!f.active && <span className="ml-2 border border-[#12372A]/20 px-1.5 py-0.5 font-mono-club text-[8px] tracking-[.1em] text-[#5d6b63]">HIDDEN</span>}</p>
-              <p className="text-xs text-[#5d6b63]">{f.access || 'No access/price line'}</p>
+              <p className="font-medium text-club-ink">{f.title} {!f.active && <span className="ml-2 border border-club-ink/20 px-1.5 py-0.5 font-mono-club text-[8px] tracking-[.1em] text-club-ink/70">HIDDEN</span>}</p>
+              <p className="text-xs text-club-ink/70">{f.access || 'No access/price line'}</p>
             </div>
             {canWrite && (
               <div className="flex flex-wrap gap-2">
@@ -118,7 +118,7 @@ export default function AdminFacilities() {
             {canDelete && <DeleteButton onConfirm={() => flash(remove(f.id))} />}
           </div>
         ))}
-        {items.length === 0 && <p className="border border-dashed border-[#12372A]/15 p-8 text-center text-sm text-[#5d6b63]">No facilities yet.</p>}
+        {items.length === 0 && <p className="border border-dashed border-club-ink/15 p-8 text-center text-sm text-club-ink/70">No facilities yet.</p>}
       </div>
       <StorageNote />
     </AdminShell>

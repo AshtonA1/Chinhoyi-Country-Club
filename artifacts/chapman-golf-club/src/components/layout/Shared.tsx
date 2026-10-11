@@ -26,7 +26,7 @@ export function ButtonLink({
   return (
     <Link
       href={href}
-      className={`group inline-flex items-center justify-center gap-3 px-5 py-3.5 text-[10px] font-bold tracking-[.15em] transition-all ${dark ? 'bg-[#12372A] text-[#F7F5EF] hover:bg-[#2E6B4E]' : 'bg-[#C8A951] text-[#17201C] hover:bg-[#e3c86b]'} ${className}`}
+      className={`group inline-flex items-center justify-center gap-3 px-5 py-3.5 text-[10px] font-bold tracking-[.15em] transition-all ${dark ? 'bg-club-green text-club-white hover:bg-club-ink' : 'bg-club-gold text-club-ink hover:bg-club-gold/85'} ${className}`}
       data-testid={`link-action-${href.replaceAll('/', '-').replace(/^[-]/, '')}`}
     >
       {children}
@@ -36,21 +36,21 @@ export function ButtonLink({
 }
 
 export function SectionLabel({ children, light = false }: { children: ReactNode; light?: boolean }) {
-  return <p className={`font-mono-club text-[10px] tracking-[.22em] ${light ? 'text-[#C8A951]' : 'text-[#2E6B4E]'}`}>{children}</p>;
+  return <p className={`font-mono-club text-[10px] tracking-[.22em] ${light ? 'text-club-white/85' : 'text-club-green'}`}>{children}</p>;
 }
 
 export function HoleDiagram() {
   return (
-    <div className="absolute bottom-8 right-5 hidden w-52 border border-white/25 bg-[#12372A]/45 p-4 backdrop-blur-sm md:block">
-      <p className="font-mono-club text-[8px] tracking-[.16em] text-[#C8A951]">HOLE DIAGRAM</p>
+    <div className="absolute bottom-8 right-5 hidden w-52 border border-white/25 bg-club-ink/45 p-4 backdrop-blur-sm md:block">
+      <p className="font-mono-club text-[8px] tracking-[.16em] text-club-gold">HOLE DIAGRAM</p>
       <svg viewBox="0 0 220 110" className="mt-3 h-auto w-full" aria-label="Illustrated hole diagram">
-        <path d="M12 82 C 47 76, 54 34, 91 43 S 137 87, 170 58 S 193 30, 210 27" fill="none" stroke="#C8A951" strokeWidth="8" strokeLinecap="round" opacity=".85" />
-        <path d="M12 82 C 47 76, 54 34, 91 43 S 137 87, 170 58 S 193 30, 210 27" fill="none" stroke="#6f9c78" strokeWidth="2" strokeDasharray="4 4" />
-        <circle cx="12" cy="82" r="5" fill="#F7F5EF" />
-        <circle cx="210" cy="27" r="5" fill="#C8A951" />
-        <path d="M178 15 C 190 8, 204 12, 211 20" fill="none" stroke="#8eb08b" strokeWidth="1.5" />
-        <text x="3" y="101" fill="#F7F5EF" fontSize="8">TEE</text>
-        <text x="184" y="18" fill="#F7F5EF" fontSize="8">GREEN</text>
+        <path d="M12 82 C 47 76, 54 34, 91 43 S 137 87, 170 58 S 193 30, 210 27" fill="none" className="stroke-club-gold" strokeWidth="8" strokeLinecap="round" opacity=".85" />
+        <path d="M12 82 C 47 76, 54 34, 91 43 S 137 87, 170 58 S 193 30, 210 27" fill="none" className="stroke-club-white/70" strokeWidth="2" strokeDasharray="4 4" />
+        <circle cx="12" cy="82" r="5" className="fill-club-white" />
+        <circle cx="210" cy="27" r="5" className="fill-club-gold" />
+        <path d="M178 15 C 190 8, 204 12, 211 20" fill="none" className="stroke-club-white/70" strokeWidth="1.5" />
+        <text x="3" y="101" className="fill-club-white" fontSize="8">TEE</text>
+        <text x="184" y="18" className="fill-club-white" fontSize="8">GREEN</text>
       </svg>
     </div>
   );
@@ -61,10 +61,10 @@ export function PageIntro({
 }: { eyebrow: string; title: string; copy: string; image: string }) {
   const { items: holes } = useHoles();
   return (
-    <section className="relative flex min-h-[560px] items-end overflow-hidden bg-[#12372A] pb-16 pt-40 text-[#F7F5EF] md:min-h-[650px] md:pb-24">
+    <section className="relative flex min-h-[440px] items-end overflow-hidden bg-club-green pb-14 pt-36 text-club-white md:min-h-[500px] md:pb-20">
       <Header />
       <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-50" />
-      <div className="absolute inset-0 bg-[#12372A]/55" />
+      <div className="absolute inset-0 bg-club-green/70" />
       <div className="relative mx-auto w-full max-w-[1480px] px-5 md:px-10">
         <div className="max-w-3xl reveal">
           <SectionLabel light>{eyebrow}</SectionLabel>
@@ -89,38 +89,38 @@ export function StatStrip({ items }: { items?: string[][] }) {
     [formatNumber(ladies.metres.total), "Metres (ladies)"],
   ];
   return (
-    <div className="grid grid-cols-2 border-y border-[#12372A]/15 md:grid-cols-4">
+    <div className="grid grid-cols-2 border-y border-club-ink/15 md:grid-cols-4">
       {shown.map(([value, label], i) => (
         <div
           key={label}
-          className={`px-5 py-7 md:px-8 md:py-9 ${i % 2 ? 'border-l border-[#12372A]/15 md:border-l-0' : ''} ${i > 1 ? 'border-t border-[#12372A]/15 md:border-t-0' : ''} ${i > 0 ? 'md:border-l md:border-[#12372A]/15' : ''}`}
+          className={`px-5 py-7 md:px-8 md:py-9 ${i % 2 ? 'border-l border-club-ink/15 md:border-l-0' : ''} ${i > 1 ? 'border-t border-club-ink/15 md:border-t-0' : ''} ${i > 0 ? 'md:border-l md:border-club-ink/15' : ''}`}
         >
-          <div className="font-display text-4xl text-[#12372A] md:text-5xl">{value}</div>
-          <div className="mt-2 font-mono-club text-[9px] tracking-[.18em] text-[#5d6b63]">{label.toUpperCase()}</div>
+          <div className="font-display text-4xl text-club-ink md:text-5xl">{value}</div>
+          <div className="mt-2 font-mono-club text-[9px] tracking-[.18em] text-club-ink/70">{label.toUpperCase()}</div>
         </div>
       ))}
     </div>
   );
 }
 
-export function LocationBand() {
+export function LocationBand({ gold = false }: { gold?: boolean }) {
   return (
-    <section className="relative overflow-hidden bg-[#2E6B4E] text-[#F7F5EF]">
+    <section className={`relative overflow-hidden ${gold ? 'on-gold' : 'border-t border-club-ink/10 bg-club-white text-club-ink'}`}>
       <div
-        className="absolute inset-0 opacity-15"
-        style={{ backgroundImage: 'radial-gradient(#C8A951 1px, transparent 1px)', backgroundSize: '28px 28px' }}
+        className="absolute inset-0 opacity-30"
+        style={{ backgroundImage: 'radial-gradient(var(--color-club-gold) 1px, transparent 1px)', backgroundSize: '28px 28px' }}
       />
       <div className="relative mx-auto grid max-w-[1480px] gap-10 px-5 py-20 md:grid-cols-12 md:px-10 md:py-24">
         <div className="md:col-span-6">
-          <SectionLabel light>COME AND FIND US</SectionLabel>
+          <SectionLabel>COME AND FIND US</SectionLabel>
           <h2 className="font-display mt-5 text-5xl leading-[.92] md:text-7xl">
             Find us in<br /><em>{club.city}.</em>
           </h2>
         </div>
         <div className="md:col-span-4 md:col-start-8">
-          <MapPin className="text-[#C8A951]" size={24} />
-          <p className="mt-5 leading-7 text-white/80">{club.address}</p>
-          <ButtonLink href="/contact" className="mt-8">PLAN YOUR VISIT</ButtonLink>
+          <MapPin className="text-club-green" size={24} />
+          <p className="mt-5 leading-7 text-club-ink/80">{club.address}</p>
+          <ButtonLink href="/contact" dark={gold} className="mt-8">PLAN YOUR VISIT</ButtonLink>
         </div>
       </div>
     </section>

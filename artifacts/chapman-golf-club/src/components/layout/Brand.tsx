@@ -5,7 +5,7 @@ export function Brand({ light = false }: { light?: boolean }) {
   return (
     <Link
       href="/"
-      className={`flex items-center gap-3 ${light ? 'text-[#F7F5EF]' : 'text-[#12372A]'}`}
+      className={`flex items-center gap-3 ${light ? 'text-club-white' : 'text-club-ink'}`}
       data-testid="link-brand"
     >
       <img src={club.logo} alt={`${club.name} badge`} className="h-11 w-11 shrink-0 rounded-full object-cover" />

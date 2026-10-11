@@ -32,14 +32,14 @@ export function AdminShell({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <div className="min-h-dvh bg-[#f4f4ee] text-[#17201C]">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col bg-[#17201C] px-5 py-6 text-[#F7F5EF] md:flex">
+    <div className="min-h-dvh bg-club-gold/5 text-club-ink">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col bg-club-ink px-5 py-6 text-club-white md:flex">
         <div className="flex items-center justify-between px-2">
           <Link href="/" className="font-display text-2xl">Chinhoyi <em>HQ</em></Link>
-          <span className="rounded-full border border-[#C8A951]/40 px-2 py-1 font-mono-club text-[8px] text-[#C8A951]">ADMIN</span>
+          <span className="rounded-full border border-club-gold/40 px-2 py-1 font-mono-club text-[8px] text-club-gold">ADMIN</span>
         </div>
         <div className="mt-8 border-y border-white/10 px-2 py-4">
-          <p className="font-mono-club text-[9px] tracking-[.14em] text-[#C8A951]">OPERATIONS</p>
+          <p className="font-mono-club text-[9px] tracking-[.14em] text-club-gold">OPERATIONS</p>
           <p className="mt-2 text-xs text-white/55">Chinhoyi Country Club</p>
         </div>
         <nav className="mt-5 grid gap-0.5 overflow-y-auto" aria-label="Admin navigation">
@@ -47,7 +47,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
             const Icon = item.icon;
             const active = location === item.href || (item.href !== '/admin' && location.startsWith(item.href));
             return (
-              <Link key={item.href} href={item.href} className={`flex items-center gap-3 px-3 py-2.5 text-xs transition-colors ${active ? 'bg-[#2E6B4E] text-white' : 'text-white/55 hover:bg-white/5 hover:text-white'}`}>
+              <Link key={item.href} href={item.href} className={`flex items-center gap-3 px-3 py-2.5 text-xs transition-colors ${active ? 'bg-club-green text-white' : 'text-white/55 hover:bg-white/5 hover:text-white'}`}>
                 <Icon size={15} strokeWidth={1.5} />{item.label}
               </Link>
             );
@@ -58,22 +58,22 @@ export function AdminShell({ children }: { children: ReactNode }) {
         </div>
       </aside>
       <div className="md:pl-64">
-        <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-[#12372A]/10 bg-[#f4f4ee]/95 px-5 backdrop-blur md:px-10">
+        <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-club-ink/10 bg-club-white/95 px-5 backdrop-blur md:px-10">
           <div>
-            <p className="font-mono-club text-[9px] tracking-[.17em] text-[#5d6b63]">CHINHOYI COUNTRY CLUB / ADMIN</p>
-            <p className="mt-1 font-display text-2xl text-[#12372A]">{greeting()}.</p>
+            <p className="font-mono-club text-[9px] tracking-[.17em] text-club-ink/70">CHINHOYI COUNTRY CLUB / ADMIN</p>
+            <p className="mt-1 font-display text-2xl text-club-ink">{greeting()}.</p>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden border-l border-[#12372A]/10 pl-3 text-xs md:block">
-              <strong className="block text-[#12372A]">{sampleAdmin.name}</strong><small className="flex items-center gap-1 text-[#5d6b63]">{sampleAdmin.title} <SampleChip /></small>
+            <span className="hidden border-l border-club-ink/10 pl-3 text-xs md:block">
+              <strong className="block text-club-ink">{sampleAdmin.name}</strong><small className="flex items-center gap-1 text-club-ink/70">{sampleAdmin.title} <SampleChip /></small>
             </span>
-            <button className="grid h-10 w-10 place-items-center border border-[#12372A]/15 md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle admin menu">
+            <button className="grid h-10 w-10 place-items-center border border-club-ink/15 md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle admin menu">
               {menuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </header>
         {menuOpen && (
-          <div className="border-b border-white/10 bg-[#17201C] px-5 py-4 text-[#F7F5EF] md:hidden">
+          <div className="border-b border-white/10 bg-club-ink px-5 py-4 text-club-white md:hidden">
             <nav className="grid gap-0.5">
               {adminNav.map((item) => (
                 <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-3 py-3 text-sm text-white/70">

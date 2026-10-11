@@ -29,6 +29,10 @@ export type Hole = {
   hazards: string[];
   proTip: string;
   image: string;
+  /** Fly-over video: a path under /public (e.g. /videos/hole-1.mp4) or a direct .mp4 link. Empty = no video. */
+  video?: string;
+  /** Still image shown before the video plays. Empty = use the hero image. */
+  videoPoster?: string;
 };
 
 export type EventStatus = 'proposed' | 'confirmed' | 'cancelled';
@@ -352,6 +356,10 @@ export const defaultHoles: Hole[] = SCORECARD.map(([number, mp, mm, ms, lp, lm, 
   hazards: [],
   proTip: '',
   image: holeImages[(number - 1) % holeImages.length],
+  // Fly-over videos exist for holes 1-9 so far. If a file is not uploaded yet the
+  // hole page quietly falls back to the photo.
+  video: number <= 9 ? `/videos/hole-${number}.mp4` : '',
+  videoPoster: number <= 9 ? `/videos/hole-${number}.jpg` : '',
 }));
 
 export const defaultCourse: CourseConfig = {

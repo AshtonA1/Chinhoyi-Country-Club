@@ -37,7 +37,7 @@ function toEvent(d: Draft): EventItem {
 }
 
 const STATUS_STYLE: Record<EventStatus, string> = {
-  proposed: 'text-[#8b6e16]', confirmed: 'text-[#2E6B4E]', cancelled: 'text-[#9b2c2c]',
+  proposed: 'text-club-gold-deep', confirmed: 'text-club-green', cancelled: 'text-club-alert',
 };
 
 export default function AdminEvents() {
@@ -69,7 +69,7 @@ export default function AdminEvents() {
         title="Give the club a reason."
         copy="Add, edit and delete events. What you save here is what visitors see on the Events page and the Home page."
         action={canWrite && (
-          <button onClick={() => { setDraft(blank()); setIsNew(true); setError(''); }} className="inline-flex items-center gap-2 bg-[#12372A] px-5 py-4 text-[10px] font-bold tracking-[.14em] text-[#F7F5EF] hover:bg-[#2E6B4E]" data-testid="button-add-event">
+          <button onClick={() => { setDraft(blank()); setIsNew(true); setError(''); }} className="inline-flex items-center gap-2 bg-club-green px-5 py-4 text-[10px] font-bold tracking-[.14em] text-club-white hover:bg-club-ink" data-testid="button-add-event">
             <Plus size={14} /> ADD EVENT
           </button>
         )}
@@ -101,7 +101,7 @@ export default function AdminEvents() {
                 <AreaField label="Prizes" rows={4} value={draft.prizes} onChange={(v) => set({ prizes: v })} hint="One line each" />
               </div>
             </div>
-            {error && <p role="alert" className="mt-4 text-xs text-[#9b2c2c]">{error}</p>}
+            {error && <p role="alert" className="mt-4 text-xs text-club-alert">{error}</p>}
             <div className="mt-5 flex flex-wrap gap-3">
               <PrimaryButton onClick={save} testId="button-save-event">SAVE EVENT</PrimaryButton>
               <GhostButton onClick={() => { setDraft(null); setError(''); }}>CANCEL</GhostButton>
@@ -110,17 +110,17 @@ export default function AdminEvents() {
         </div>
       )}
 
-      <div className="mt-6 overflow-x-auto border border-[#12372A]/10 bg-[#F7F5EF]">
+      <div className="mt-6 overflow-x-auto border border-club-ink/10 bg-club-white">
         <table className="w-full min-w-[720px] text-left text-sm">
-          <thead className="border-b border-[#12372A]/10 bg-[#e8e9df] font-mono-club text-[9px] tracking-[.12em] text-[#5d6b63]">
+          <thead className="border-b border-club-ink/10 bg-club-gold/10 font-mono-club text-[9px] tracking-[.12em] text-club-ink/70">
             <tr><th className="px-5 py-4">DATE</th><th className="px-5 py-4">EVENT</th><th className="px-5 py-4">TYPE</th><th className="px-5 py-4">STATUS</th><th className="px-5 py-4" /></tr>
           </thead>
           <tbody>
             {items.map((e) => (
-              <tr key={e.id} className="border-b border-[#12372A]/10 last:border-0">
-                <td className="px-5 py-4 font-mono-club text-[10px] text-[#2E6B4E]">{formatDate(e.date)}</td>
-                <td className="px-5 py-4 font-medium text-[#12372A]">{e.title}</td>
-                <td className="px-5 py-4 text-[#5d6b63]">{e.type}</td>
+              <tr key={e.id} className="border-b border-club-ink/10 last:border-0">
+                <td className="px-5 py-4 font-mono-club text-[10px] text-club-green">{formatDate(e.date)}</td>
+                <td className="px-5 py-4 font-medium text-club-ink">{e.title}</td>
+                <td className="px-5 py-4 text-club-ink/70">{e.type}</td>
                 <td className="px-5 py-4"><span className={`text-[10px] font-bold tracking-[.1em] ${STATUS_STYLE[e.status]}`}>{e.status.toUpperCase()}</span></td>
                 <td className="px-5 py-3">
                   <div className="flex justify-end gap-2">
@@ -132,7 +132,7 @@ export default function AdminEvents() {
             ))}
           </tbody>
         </table>
-        {items.length === 0 && <div className="p-10 text-center text-sm text-[#5d6b63]">No events yet. Add the first one.</div>}
+        {items.length === 0 && <div className="p-10 text-center text-sm text-club-ink/70">No events yet. Add the first one.</div>}
       </div>
       {canDelete && (
         <div className="mt-6 flex items-center gap-4">

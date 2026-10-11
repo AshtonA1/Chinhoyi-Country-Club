@@ -5,6 +5,20 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Chinhoyi Country Club brand palette - the ONLY place these colours are defined.
+   Target balance across a page: white 40% / gold 30% / green 20% / ink 10%.
+   Use as bg-club-gold, text-club-ink, border-club-green/20 and so on. */
+@theme {
+  --color-club-white: #FFFFFF;
+  --color-club-gold: #C9A227;
+  --color-club-green: #176B3A;
+  --color-club-ink: #202820;
+  /* Text-safe darker gold: club gold on white is too light for small text. */
+  --color-club-gold-deep: #8B6E16;
+  /* Functional colour for errors / cancelled states (not a brand colour). */
+  --color-club-alert: #9B2C2C;
+}
+
 @theme inline {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -40,48 +54,48 @@
 }
 
 :root {
-  --background: 42 27% 96%;
-  --foreground: 156 20% 11%;
-  --border: 40 15% 82%;
-  --input: 40 15% 82%;
-  --ring: 43 52% 55%;
-  --card: 42 27% 98%;
-  --card-foreground: 156 20% 11%;
-  --card-border: 40 15% 85%;
-  --popover: 42 27% 98%;
-  --popover-foreground: 156 20% 11%;
-  --popover-border: 40 15% 82%;
-  --primary: 155 49% 19%;
-  --primary-foreground: 42 27% 96%;
-  --secondary: 150 41% 30%;
-  --secondary-foreground: 42 27% 96%;
-  --muted: 42 16% 90%;
-  --muted-foreground: 155 10% 38%;
-  --accent: 43 52% 55%;
-  --accent-foreground: 156 20% 11%;
+  --background: 0 0% 100%;
+  --foreground: 120 11% 14%;
+  --border: 120 2% 87%;
+  --input: 120 2% 87%;
+  --ring: 46 68% 47%;
+  --card: 0 0% 100%;
+  --card-foreground: 120 11% 14%;
+  --card-border: 120 2% 87%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 120 11% 14%;
+  --popover-border: 120 2% 87%;
+  --primary: 145 65% 25%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 46 68% 47%;
+  --secondary-foreground: 120 11% 14%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 120 3% 40%;
+  --accent: 46 68% 47%;
+  --accent-foreground: 120 11% 14%;
   --destructive: 4 62% 45%;
-  --destructive-foreground: 42 27% 96%;
-  --sidebar: 155 49% 19%;
-  --sidebar-foreground: 42 27% 96%;
-  --sidebar-border: 150 41% 30%;
+  --destructive-foreground: 0 0% 100%;
+  --sidebar: 120 11% 14%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-border: 120 8% 24%;
   --app-font-sans: 'DM Sans', sans-serif;
   --app-font-serif: 'Instrument Serif', Georgia, serif;
   --app-font-mono: 'Space Mono', monospace;
   --radius: 0.55rem;
-  --shadow-soft: 0 18px 45px rgba(18, 55, 42, .09);
+  --shadow-soft: 0 18px 45px rgba(32, 40, 32, .09);
 }
 
 .dark {
-  --background: 156 20% 11%;
-  --foreground: 42 27% 96%;
-  --card: 155 24% 15%;
-  --card-foreground: 42 27% 96%;
-  --border: 155 15% 26%;
-  --input: 155 15% 26%;
-  --muted: 155 15% 22%;
-  --muted-foreground: 42 12% 72%;
-  --popover: 155 24% 15%;
-  --popover-foreground: 42 27% 96%;
+  --background: 120 11% 14%;
+  --foreground: 0 0% 100%;
+  --card: 120 10% 18%;
+  --card-foreground: 0 0% 100%;
+  --border: 120 8% 26%;
+  --input: 120 8% 26%;
+  --muted: 120 8% 22%;
+  --muted-foreground: 0 0% 72%;
+  --popover: 120 10% 18%;
+  --popover-foreground: 0 0% 100%;
 }
 
 @layer base {
@@ -90,8 +104,8 @@
   body { @apply font-sans antialiased bg-background text-foreground; margin: 0; }
   button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
   button, a, input, select, textarea { outline-offset: 3px; }
-  :focus-visible { outline: 2px solid #C8A951; outline-offset: 4px; }
-  ::selection { background: #C8A951; color: #17201C; }
+  :focus-visible { outline: 2px solid var(--color-club-gold); outline-offset: 4px; }
+  ::selection { background: var(--color-club-gold); color: var(--color-club-ink); }
 }
 
 @layer utilities {
@@ -114,6 +128,10 @@
   .image-zoom { transition: transform 700ms cubic-bezier(.2,.8,.2,1); }
   .group:hover .image-zoom { transform: scale(1.045); }
   .touch-target { min-height: 44px; min-width: 44px; }
+  /* A gold surface. Gold is too light for white or green text (contrast 2.4-2.7),
+     so everything inside a gold section is forced to the dark ink colour. */
+  .on-gold { background-color: var(--color-club-gold); color: var(--color-club-ink); }
+  .on-gold :is(.text-club-green, .text-club-gold-deep, .text-club-gold, [class*="text-club-ink/"]) { color: var(--color-club-ink); }
 }
 
 @keyframes rise-in {

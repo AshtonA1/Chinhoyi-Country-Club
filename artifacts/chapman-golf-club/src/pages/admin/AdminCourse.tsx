@@ -10,7 +10,7 @@ import { formatNumber, splitList } from '@/lib/format';
 import { useCan } from '@/lib/permissions';
 import { TEE_LABEL, type TeeKey, teeTotals, validateHoles } from '@/lib/scorecard';
 
-const cell = 'w-16 border border-[#cfd4cd] bg-white px-2 py-1.5 text-center text-sm text-[#12372A] outline-none focus:border-[#2E6B4E]';
+const cell = 'w-16 border border-club-ink/20 bg-white px-2 py-1.5 text-center text-sm text-club-ink outline-none focus:border-club-green';
 
 function Num({ value, onChange }: { value: number; onChange: (n: number) => void }) {
   return (
@@ -91,11 +91,11 @@ export default function AdminCourse() {
       </div>
       <div className="mt-4 flex flex-wrap items-center gap-4">
         <SaveNotice notice={notice} />
-        {dirty && <span className="text-xs text-[#8b6e16]">Unsaved changes.</span>}
+        {dirty && <span className="text-xs text-club-gold-deep">Unsaved changes.</span>}
       </div>
 
       {(issues.length > 0 || gaps.length > 0) && (
-        <div className="mt-4 border-l-2 border-[#C8A951] bg-[#fbf3d8] p-4 text-xs leading-5 text-[#5d4a12]">
+        <div className="mt-4 border-l-2 border-club-gold bg-club-gold/15 p-4 text-xs leading-5 text-club-ink">
           <p className="flex items-center gap-2 font-bold"><AlertTriangle size={14} /> Check these before relying on the scorecard</p>
           <ul className="mt-2 grid gap-1">
             {[...issues, ...gaps].map((m) => <li key={m}>• {m}</li>)}
@@ -103,9 +103,9 @@ export default function AdminCourse() {
         </div>
       )}
 
-      <div className="mt-6 overflow-x-auto border border-[#12372A]/10 bg-[#F7F5EF]">
+      <div className="mt-6 overflow-x-auto border border-club-ink/10 bg-club-white">
         <table className="w-full min-w-[900px] text-left text-sm">
-          <thead className="border-b border-[#12372A]/10 bg-[#e8e9df] font-mono-club text-[9px] tracking-[.1em] text-[#5d6b63]">
+          <thead className="border-b border-club-ink/10 bg-club-gold/10 font-mono-club text-[9px] tracking-[.1em] text-club-ink/70">
             <tr>
               <th className="px-3 py-3">HOLE</th>
               <th className="px-3 py-3 text-center" colSpan={3}>MEN'S: PAR · METRES · SI</th>
@@ -115,8 +115,8 @@ export default function AdminCourse() {
           </thead>
           <tbody>
             {holes.map((h) => (
-              <tr key={h.id} className={`border-b border-[#12372A]/10 last:border-0 ${selected === h.number ? 'bg-[#e4eee6]' : ''}`}>
-                <td className="px-3 py-2 font-display text-xl text-[#12372A]">{h.number}</td>
+              <tr key={h.id} className={`border-b border-club-ink/10 last:border-0 ${selected === h.number ? 'bg-club-green/10' : ''}`}>
+                <td className="px-3 py-2 font-display text-xl text-club-ink">{h.number}</td>
                 {(['men', 'ladies'] as TeeKey[]).map((tee) => (
                   <td key={tee} colSpan={3} className="px-1 py-2">
                     <div className="flex justify-center gap-1">
@@ -127,7 +127,7 @@ export default function AdminCourse() {
                   </td>
                 ))}
                 <td className="px-3 py-2">
-                  <button onClick={() => setSelected(selected === h.number ? null : h.number)} className="text-[10px] font-bold tracking-[.12em] text-[#2E6B4E]">
+                  <button onClick={() => setSelected(selected === h.number ? null : h.number)} className="text-[10px] font-bold tracking-[.12em] text-club-green">
                     {selected === h.number ? 'CLOSE' : h.name || h.description || h.hazards.length || h.proTip ? 'EDIT' : 'ADD'}
                   </button>
                 </td>
@@ -143,6 +143,8 @@ export default function AdminCourse() {
             <div className="grid gap-4 md:grid-cols-2">
               <TextField label="Name (optional)" value={sel.name} onChange={(v) => patchHole(sel.number, { name: v })} />
               <TextField label="Hero image path" value={sel.image} onChange={(v) => patchHole(sel.number, { image: v })} hint="Path under /public, e.g. /images/hole-1.jpg" />
+              <TextField label="Fly-over video" value={sel.video ?? ''} onChange={(v) => patchHole(sel.number, { video: v })} hint="Path under /public (e.g. /videos/hole-1.mp4) or a direct .mp4 link. Leave empty for no video." />
+              <TextField label="Video cover image (optional)" value={sel.videoPoster ?? ''} onChange={(v) => patchHole(sel.number, { videoPoster: v })} hint="Shown before play, e.g. /videos/hole-1.jpg. Empty uses the hero image." />
             </div>
             <div className="mt-4 grid gap-4">
               <AreaField label="Description" value={sel.description} onChange={(v) => patchHole(sel.number, { description: v })} />
@@ -157,7 +159,7 @@ export default function AdminCourse() {
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <Panel title="Printed totals (metres)">
-          <p className="mb-4 text-xs leading-5 text-[#5d6b63]">If the club's card prints its own totals, enter them here and they are shown instead of the sum of the holes. Leave empty to use the sum.</p>
+          <p className="mb-4 text-xs leading-5 text-club-ink/70">If the club's card prints its own totals, enter them here and they are shown instead of the sum of the holes. Leave empty to use the sum.</p>
           <div className="grid gap-4 sm:grid-cols-3">
             {numField("Men's front", 'menFrontOfficial')}
             {numField("Men's back", 'menBackOfficial')}
@@ -168,7 +170,7 @@ export default function AdminCourse() {
           </div>
         </Panel>
         <Panel title="Course rating & slope">
-          <p className="mb-4 text-xs leading-5 text-[#5d6b63]">Shown on the public scorecard only when both rating and slope are entered for a tee.</p>
+          <p className="mb-4 text-xs leading-5 text-club-ink/70">Shown on the public scorecard only when both rating and slope are entered for a tee.</p>
           <div className="grid gap-4 sm:grid-cols-2">
             {numField("Men's rating", 'menRating', undefined, '0.1')}
             {numField("Men's slope", 'menSlope')}

@@ -69,53 +69,53 @@ export function AdminResource({ section }: { section: string }) {
       <section className="mt-8">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-2">
-            <Search className="text-[#5d6b63]" size={16} />
-            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search this area" className="w-56 border-b border-[#12372A]/20 bg-transparent px-2 py-2 text-sm text-[#12372A] outline-none focus:border-[#2E6B4E]" />
+            <Search className="text-club-ink/70" size={16} />
+            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search this area" className="w-56 border-b border-club-ink/20 bg-transparent px-2 py-2 text-sm text-club-ink outline-none focus:border-club-green" />
           </div>
           <div className="flex items-center gap-2">
-            <Icon size={16} className="text-[#2E6B4E]" />
-            <button onClick={() => setShowFilters((v) => !v)} className={`flex items-center gap-2 border px-3 py-2 text-[10px] font-bold tracking-[.12em] ${showFilters ? 'border-[#2E6B4E] bg-[#e8e9df] text-[#12372A]' : 'border-[#12372A]/15 text-[#5d6b63]'}`}><Filter size={14} /> FILTER</button>
-            <button onClick={() => setView((v) => (v === 'table' ? 'compact' : 'table'))} className="flex items-center gap-2 border border-[#12372A]/15 px-3 py-2 text-[10px] font-bold tracking-[.12em] text-[#5d6b63] hover:border-[#2E6B4E]"><SlidersHorizontal size={14} /> {view === 'table' ? 'COMFORTABLE' : 'COMPACT'}</button>
+            <Icon size={16} className="text-club-green" />
+            <button onClick={() => setShowFilters((v) => !v)} className={`flex items-center gap-2 border px-3 py-2 text-[10px] font-bold tracking-[.12em] ${showFilters ? 'border-club-green bg-club-gold/10 text-club-ink' : 'border-club-ink/15 text-club-ink/70'}`}><Filter size={14} /> FILTER</button>
+            <button onClick={() => setView((v) => (v === 'table' ? 'compact' : 'table'))} className="flex items-center gap-2 border border-club-ink/15 px-3 py-2 text-[10px] font-bold tracking-[.12em] text-club-ink/70 hover:border-club-green"><SlidersHorizontal size={14} /> {view === 'table' ? 'COMFORTABLE' : 'COMPACT'}</button>
           </div>
         </div>
         {showFilters && (
-          <div className="mt-3 flex flex-wrap items-center gap-2 border border-[#12372A]/10 bg-white p-3">
-            <span className="font-mono-club text-[9px] tracking-[.12em] text-[#5d6b63]">STATUS:</span>
+          <div className="mt-3 flex flex-wrap items-center gap-2 border border-club-ink/10 bg-white p-3">
+            <span className="font-mono-club text-[9px] tracking-[.12em] text-club-ink/70">STATUS:</span>
             {['All', ...statuses].map((s) => (
               <button
                 key={s}
                 onClick={() => setStatusFilter(s)}
-                className={`border px-3 py-1.5 text-[10px] font-bold tracking-[.1em] ${statusFilter === s ? 'border-[#2E6B4E] bg-[#2E6B4E] text-white' : 'border-[#12372A]/15 text-[#5d6b63]'}`}
+                className={`border px-3 py-1.5 text-[10px] font-bold tracking-[.1em] ${statusFilter === s ? 'border-club-green bg-club-green text-white' : 'border-club-ink/15 text-club-ink/70'}`}
               >
                 {s.toUpperCase()}
               </button>
             ))}
           </div>
         )}
-        <div className="mt-4 overflow-x-auto border border-[#12372A]/10 bg-[#F7F5EF]">
+        <div className="mt-4 overflow-x-auto border border-club-ink/10 bg-club-white">
           <table className="w-full min-w-[680px] text-left text-sm">
-            <thead className="border-b border-[#12372A]/10 bg-[#e8e9df] font-mono-club text-[9px] tracking-[.12em] text-[#5d6b63]">
+            <thead className="border-b border-club-ink/10 bg-club-gold/10 font-mono-club text-[9px] tracking-[.12em] text-club-ink/70">
               <tr><th className="px-5 py-4">REFERENCE</th><th className="px-5 py-4">NAME / DETAIL</th><th className="px-5 py-4">CONTEXT</th><th className="px-5 py-4">STATUS</th><th className="px-5 py-4" /></tr>
             </thead>
             <tbody>
               {filteredRows.map((row) => (
-                <tr key={row[0]} className="border-b border-[#12372A]/10 last:border-0">
-                  <td className={`px-5 font-mono-club text-[10px] text-[#2E6B4E] ${view === 'table' ? 'py-4' : 'py-2'}`}>{row[0]}</td>
-                  <td className={`px-5 font-medium text-[#12372A] ${view === 'table' ? 'py-4' : 'py-2'}`}>{row[1]}</td>
-                  <td className={`px-5 text-[#5d6b63] ${view === 'table' ? 'py-4' : 'py-2'}`}>{row[2]}</td>
+                <tr key={row[0]} className="border-b border-club-ink/10 last:border-0">
+                  <td className={`px-5 font-mono-club text-[10px] text-club-green ${view === 'table' ? 'py-4' : 'py-2'}`}>{row[0]}</td>
+                  <td className={`px-5 font-medium text-club-ink ${view === 'table' ? 'py-4' : 'py-2'}`}>{row[1]}</td>
+                  <td className={`px-5 text-club-ink/70 ${view === 'table' ? 'py-4' : 'py-2'}`}>{row[2]}</td>
                   <td className={`px-5 ${view === 'table' ? 'py-4' : 'py-2'}`}>
-                    <span className={`text-[10px] font-bold tracking-[.1em] ${row[3] === 'Draft' || row[3] === 'Outstanding' || row[3] === 'Low stock' ? 'text-[#8b6e16]' : 'text-[#2E6B4E]'}`}>{row[3].toUpperCase()}</span>
+                    <span className={`text-[10px] font-bold tracking-[.1em] ${row[3] === 'Draft' || row[3] === 'Outstanding' || row[3] === 'Low stock' ? 'text-club-gold-deep' : 'text-club-green'}`}>{row[3].toUpperCase()}</span>
                   </td>
                   <td className={`px-5 text-right ${view === 'table' ? 'py-4' : 'py-2'}`}>
                     <button disabled aria-label={`Manage ${row[0]} (not available in the demo)`} title="Not available in the demo">
-                      <MoreHorizontal size={17} className="text-[#5d6b63] hover:text-[#12372A]" />
+                      <MoreHorizontal size={17} className="text-club-ink/70 hover:text-club-ink" />
                     </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {filteredRows.length === 0 && <div className="p-10 text-center text-sm text-[#5d6b63]">No records match this search{statusFilter !== 'All' ? ` with status "${statusFilter}"` : ''}.</div>}
+          {filteredRows.length === 0 && <div className="p-10 text-center text-sm text-club-ink/70">No records match this search{statusFilter !== 'All' ? ` with status "${statusFilter}"` : ''}.</div>}
         </div>
       </section>
     </AdminShell>

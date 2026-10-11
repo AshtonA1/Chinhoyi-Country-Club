@@ -13,10 +13,10 @@ function List({ title, lines, icon = false }: { title: string; lines: string[]; 
   return (
     <div className="mt-10 first:mt-0">
       <SectionLabel>{title}</SectionLabel>
-      <ul className="mt-4 grid gap-3 border-t border-[#12372A]/15 pt-5 text-sm text-[#5d6b63]">
+      <ul className="mt-4 grid gap-3 border-t border-club-ink/15 pt-5 text-sm text-club-ink/70">
         {lines.map((line) => (
           <li key={line} className="flex items-start gap-3">
-            {icon ? <CalendarClock size={15} className="mt-0.5 shrink-0 text-[#2E6B4E]" /> : <span className="text-[#C8A951]">—</span>}
+            {icon ? <CalendarClock size={15} className="mt-0.5 shrink-0 text-club-green" /> : <span className="text-club-gold">—</span>}
             {line}
           </li>
         ))}
@@ -36,50 +36,50 @@ export default function EventDetail() {
   const hasFacts = Boolean(event.time || event.entryFee || event.registrationDeadline);
 
   return (
-    <div className="bg-[#F7F5EF]">
+    <div className="bg-club-white">
       <PageIntro eyebrow={`${event.type.toUpperCase()} · ${p.day} ${p.month} ${p.year}`} title={event.title} copy={event.text} image={images.dining} />
       <main className="mx-auto grid max-w-[1480px] gap-12 px-5 py-20 md:grid-cols-12 md:px-10 md:py-28">
         <div className="md:col-span-7">
           {event.status === 'proposed' && (
-            <p className="mb-8 border-l-2 border-[#C8A951] bg-[#fbf3d8] px-4 py-3 text-sm leading-6 text-[#5d4a12]">
+            <p className="mb-8 border-l-2 border-club-gold bg-club-gold/15 px-4 py-3 text-sm leading-6 text-club-ink">
               <strong>Proposed date.</strong> This event is on the Captain’s proposed programme and is subject to approval.
             </p>
           )}
           {event.status === 'cancelled' && (
-            <p className="mb-8 border-l-2 border-[#9b2c2c] bg-[#9b2c2c]/5 px-4 py-3 text-sm leading-6 text-[#9b2c2c]"><strong>This event has been cancelled.</strong></p>
+            <p className="mb-8 border-l-2 border-club-alert bg-club-alert/5 px-4 py-3 text-sm leading-6 text-club-alert"><strong>This event has been cancelled.</strong></p>
           )}
           <List title="SCHEDULE" lines={event.schedule ?? []} icon />
           <List title="RULES" lines={event.rules ?? []} />
           <List title="PRIZES" lines={event.prizes ?? []} />
           {!event.schedule?.length && !event.rules?.length && !event.prizes?.length && (
-            <p className="text-sm leading-7 text-[#5d6b63]">The programme, rules and prizes for this event will be published here once the club confirms them.</p>
+            <p className="text-sm leading-7 text-club-ink/70">The programme, rules and prizes for this event will be published here once the club confirms them.</p>
           )}
         </div>
         <div className="md:col-span-4 md:col-start-9">
-          <div className="border border-[#12372A]/10 bg-white p-6">
-            <div className="flex justify-between border-b border-[#12372A]/10 pb-3 text-sm">
-              <span className="text-[#5d6b63]">Date</span><strong className="text-[#12372A]">{formatDate(event.date)}</strong>
+          <div className="border border-club-ink/10 bg-white p-6">
+            <div className="flex justify-between border-b border-club-ink/10 pb-3 text-sm">
+              <span className="text-club-ink/70">Date</span><strong className="text-club-ink">{formatDate(event.date)}</strong>
             </div>
             {event.time && (
-              <div className="flex justify-between border-b border-[#12372A]/10 py-3 text-sm">
-                <span className="text-[#5d6b63]">Time</span><strong className="text-[#12372A]">{event.time}</strong>
+              <div className="flex justify-between border-b border-club-ink/10 py-3 text-sm">
+                <span className="text-club-ink/70">Time</span><strong className="text-club-ink">{event.time}</strong>
               </div>
             )}
             {event.entryFee && (
-              <div className="flex justify-between border-b border-[#12372A]/10 py-3 text-sm">
-                <span className="text-[#5d6b63]">Entry fee</span><strong className="text-[#12372A]">{event.entryFee}</strong>
+              <div className="flex justify-between border-b border-club-ink/10 py-3 text-sm">
+                <span className="text-club-ink/70">Entry fee</span><strong className="text-club-ink">{event.entryFee}</strong>
               </div>
             )}
             {event.registrationDeadline && (
-              <div className="flex justify-between border-b border-[#12372A]/10 py-3 text-sm">
-                <span className="text-[#5d6b63]">Registration closes</span><strong className="text-[#12372A]">{event.registrationDeadline}</strong>
+              <div className="flex justify-between border-b border-club-ink/10 py-3 text-sm">
+                <span className="text-club-ink/70">Registration closes</span><strong className="text-club-ink">{event.registrationDeadline}</strong>
               </div>
             )}
-            {!hasFacts && <p className="pt-3 text-xs leading-5 text-[#5d6b63]">Time and entry fee to be confirmed.</p>}
+            {!hasFacts && <p className="pt-3 text-xs leading-5 text-club-ink/70">Time and entry fee to be confirmed.</p>}
             {event.status !== 'cancelled' && (
               <Link
                 href="/contact"
-                className="mt-5 flex w-full items-center justify-center bg-[#12372A] py-4 text-[10px] font-bold tracking-[.15em] text-[#F7F5EF] hover:bg-[#2E6B4E]"
+                className="mt-5 flex w-full items-center justify-center bg-club-green py-4 text-[10px] font-bold tracking-[.15em] text-club-white hover:bg-club-ink"
                 data-testid="button-register-event"
               >
                 ASK ABOUT ENTERING

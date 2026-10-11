@@ -16,8 +16,8 @@ export default function MemberMembership() {
       <PortalHeading eyebrow="MEMBER ROOM / MEMBERSHIP" title="Your place here." copy="Your membership fee and what it includes." />
       <div className="mt-8 grid gap-8 lg:grid-cols-12">
         <div className="lg:col-span-7">
-          <div className="relative overflow-hidden bg-[#12372A] p-7 text-[#F7F5EF] md:p-10">
-            <div className="absolute right-0 top-0 h-40 w-40 rounded-full border border-[#C8A951]/30" />
+          <div className="relative overflow-hidden bg-club-green p-7 text-club-white md:p-10">
+            <div className="absolute right-0 top-0 h-40 w-40 rounded-full border border-club-gold/30" />
             <div className="flex items-center gap-3"><SectionLabel light>MEMBERSHIP</SectionLabel><SampleChip dark /></div>
             <div className="mt-8 flex flex-col justify-between gap-8 sm:flex-row">
               <div>
@@ -25,7 +25,7 @@ export default function MemberMembership() {
                 <p className="mt-3 text-sm text-white/60">{p.membershipBilling ? `${p.currency} ${p.membershipBilling}` : p.currency} · includes everything</p>
               </div>
               <div className="text-left sm:text-right">
-                <p className="font-mono-club text-[9px] tracking-[.14em] text-[#C8A951]">MEMBER NO.</p>
+                <p className="font-mono-club text-[9px] tracking-[.14em] text-club-gold">MEMBER NO.</p>
                 <p className="mt-2 font-display text-3xl">{sampleMember.memberNo}</p>
               </div>
             </div>
@@ -37,11 +37,11 @@ export default function MemberMembership() {
         </div>
         <div className="lg:col-span-5">
           <SectionLabel>FEES</SectionLabel>
-          <div className="mt-4 grid gap-2 border border-[#12372A]/10 bg-[#F7F5EF] p-5 text-sm text-[#5d6b63]">
-            <div className="flex justify-between"><span>Joining fee</span><strong className="text-[#12372A]">{formatMoney(p.joiningFee, s)}</strong></div>
-            <div className="flex justify-between"><span>Membership fee</span><strong className="text-[#12372A]">{formatMoney(p.membershipFee, s)}</strong></div>
-            <div className="flex justify-between"><span>HNA handicap (optional)</span><strong className="text-[#12372A]">{formatMoney(p.hnaFee, s)}</strong></div>
-            <div className="flex justify-between border-t border-[#12372A]/10 pt-2"><span>Green fee, member</span><strong className="text-[#12372A]">{formatMoney(p.greenFeeMember, s)}</strong></div>
+          <div className="mt-4 grid gap-2 border border-club-ink/10 bg-club-white p-5 text-sm text-club-ink/70">
+            <div className="flex justify-between"><span>Joining fee</span><strong className="text-club-ink">{formatMoney(p.joiningFee, s)}</strong></div>
+            <div className="flex justify-between"><span>Membership fee</span><strong className="text-club-ink">{formatMoney(p.membershipFee, s)}</strong></div>
+            <div className="flex justify-between"><span>HNA handicap (optional)</span><strong className="text-club-ink">{formatMoney(p.hnaFee, s)}</strong></div>
+            <div className="flex justify-between border-t border-club-ink/10 pt-2"><span>Green fee, member</span><strong className="text-club-ink">{formatMoney(p.greenFeeMember, s)}</strong></div>
           </div>
         </div>
       </div>

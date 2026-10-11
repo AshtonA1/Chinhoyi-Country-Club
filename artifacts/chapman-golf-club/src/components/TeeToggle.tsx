@@ -6,8 +6,8 @@ export function TeeToggle({ value, onChange, light = false }: { value: TeeKey; o
     <div className="inline-flex" role="group" aria-label="Choose tees">
       {options.map(([key, label]) => {
         const active = value === key;
-        const activeCls = light ? 'border-[#C8A951] bg-[#C8A951] text-[#17201C]' : 'border-[#2E6B4E] bg-[#2E6B4E] text-white';
-        const idleCls = light ? 'border-white/25 text-white/70 hover:border-[#C8A951]' : 'border-[#12372A]/20 text-[#5d6b63] hover:border-[#2E6B4E]';
+        const activeCls = light ? 'border-club-gold bg-club-gold text-club-ink' : 'border-club-green bg-club-green text-white';
+        const idleCls = light ? 'border-white/25 text-white/70 hover:border-club-gold' : 'border-club-ink/20 text-club-ink/70 hover:border-club-green';
         return (
           <button
             key={key}

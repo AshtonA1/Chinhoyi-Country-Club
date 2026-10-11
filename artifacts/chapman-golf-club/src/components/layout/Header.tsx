@@ -9,7 +9,7 @@ export function Header({ solid = false }: { solid?: boolean }) {
   const [location] = useLocation();
   const isSolid = solid || location === '/tee-times';
   return (
-    <header className={`absolute left-0 right-0 top-0 z-40 ${isSolid ? 'bg-[#F7F5EF] text-[#12372A]' : 'text-[#F7F5EF]'}`}>
+    <header className={`absolute left-0 right-0 top-0 z-40 ${isSolid ? 'bg-club-white text-club-ink' : 'text-club-white'}`}>
       <div className="mx-auto flex max-w-[1480px] items-center justify-between px-5 py-5 lg:px-10 lg:py-7">
         <Brand light={!isSolid} />
         <nav className="hidden items-center gap-5 xl:flex" aria-label="Main navigation">
@@ -17,7 +17,7 @@ export function Header({ solid = false }: { solid?: boolean }) {
             <Link
               key={href}
               href={href}
-              className={`text-[11px] font-medium tracking-[.1em] transition-colors hover:text-[#C8A951] ${location === href ? 'text-[#C8A951]' : isSolid ? 'text-[#12372A]/70' : 'text-white/80'}`}
+              className={`border-b-2 pb-1 text-[11px] font-medium tracking-[.1em] transition-colors ${isSolid ? 'hover:text-club-green' : 'hover:text-club-white'} ${location === href ? `border-club-gold ${isSolid ? 'text-club-ink' : 'text-club-white'}` : `border-transparent ${isSolid ? 'text-club-ink/70' : 'text-white/80'}`}`}
               data-testid={`link-nav-${label.toLowerCase().replaceAll(' ', '-')}`}
             >
               {label}
@@ -27,20 +27,20 @@ export function Header({ solid = false }: { solid?: boolean }) {
         <div className="flex items-center gap-2">
           <Link
             href="/tee-times"
-            className="hidden border border-[#C8A951] bg-[#C8A951] px-4 py-3 text-[10px] font-bold tracking-[.14em] text-[#17201C] transition-colors hover:bg-[#f0db87] sm:block"
+            className="hidden border border-club-gold bg-club-gold px-4 py-3 text-[10px] font-bold tracking-[.14em] text-club-ink transition-colors hover:bg-club-gold/85 sm:block"
             data-testid="link-header-book"
           >
             BOOK A TEE TIME
           </Link>
           <Link
             href="/member/login"
-            className={`hidden border px-4 py-3 text-[10px] font-bold tracking-[.14em] transition-colors hover:border-[#C8A951] hover:text-[#C8A951] lg:block ${isSolid ? 'border-[#12372A]/30' : 'border-white/35'}`}
+            className={`hidden border px-4 py-3 text-[10px] font-bold tracking-[.14em] transition-colors hover:border-club-gold hover:text-club-gold lg:block ${isSolid ? 'border-club-ink/30' : 'border-white/35'}`}
             data-testid="link-header-login"
           >
             MEMBER LOGIN
           </Link>
           <button
-            className={`grid h-11 w-11 place-items-center border xl:hidden ${isSolid ? 'border-[#12372A]/25' : 'border-white/30'}`}
+            className={`grid h-11 w-11 place-items-center border xl:hidden ${isSolid ? 'border-club-ink/25' : 'border-white/30'}`}
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
             data-testid="button-menu-toggle"
@@ -50,7 +50,7 @@ export function Header({ solid = false }: { solid?: boolean }) {
         </div>
       </div>
       {open && (
-        <div className="border-t border-white/15 bg-[#12372A] px-5 py-5 xl:hidden">
+        <div className="border-t border-white/15 bg-club-ink px-5 py-5 xl:hidden">
           <div className="grid gap-1">
             {navItems.map(([label, href]) => (
               <Link
@@ -66,7 +66,7 @@ export function Header({ solid = false }: { solid?: boolean }) {
             <Link
               href="/tee-times"
               onClick={() => setOpen(false)}
-              className="mt-4 bg-[#C8A951] px-4 py-3 text-center text-[11px] font-bold tracking-[.14em] text-[#17201C]"
+              className="mt-4 bg-club-gold px-4 py-3 text-center text-[11px] font-bold tracking-[.14em] text-club-ink"
               data-testid="link-mobile-book"
             >
               BOOK A TEE TIME

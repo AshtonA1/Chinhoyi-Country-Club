@@ -27,7 +27,7 @@ export default function AdminUsersRoles() {
         eyebrow="ADMIN PORTAL / USERS & ROLES"
         title="The team behind the club."
         copy="Control access with clear roles and a dependable, module-by-module permission matrix."
-        action={<button disabled title="Not available in the demo" className="inline-flex items-center gap-2 bg-[#12372A] px-5 py-4 text-[10px] font-bold tracking-[.14em] text-[#F7F5EF] disabled:opacity-40"><Plus size={14} /> INVITE USER</button>}
+        action={<button disabled title="Not available in the demo" className="inline-flex items-center gap-2 bg-club-ink px-5 py-4 text-[10px] font-bold tracking-[.14em] text-club-white disabled:opacity-40"><Plus size={14} /> INVITE USER</button>}
       />
       <div className="mt-8 grid gap-3 md:grid-cols-3">
         <PortalStat label="TOTAL USERS" value={String(users.length)} note="Across the club" />
@@ -37,19 +37,19 @@ export default function AdminUsersRoles() {
 
       <section className="mt-10">
         <div className="flex items-center gap-3"><SectionLabel>TEAM MEMBERS</SectionLabel><SampleChip /></div>
-        <div className="mt-4 overflow-x-auto border border-[#12372A]/10 bg-[#F7F5EF]">
+        <div className="mt-4 overflow-x-auto border border-club-ink/10 bg-club-white">
           <table className="w-full min-w-[680px] text-left text-sm">
-            <thead className="border-b border-[#12372A]/10 bg-[#e8e9df] font-mono-club text-[9px] tracking-[.12em] text-[#5d6b63]">
+            <thead className="border-b border-club-ink/10 bg-club-gold/10 font-mono-club text-[9px] tracking-[.12em] text-club-ink/70">
               <tr><th className="px-5 py-4">ID</th><th className="px-5 py-4">NAME</th><th className="px-5 py-4">TITLE</th><th className="px-5 py-4">ROLE</th></tr>
             </thead>
             <tbody>
               {users.map((u) => (
-                <tr key={u.id} className="border-b border-[#12372A]/10 last:border-0">
-                  <td className="px-5 py-4 font-mono-club text-[10px] text-[#2E6B4E]">{u.id}</td>
-                  <td className="px-5 py-4 font-medium text-[#12372A]">{u.name}</td>
-                  <td className="px-5 py-4 text-[#5d6b63]">{u.title}</td>
+                <tr key={u.id} className="border-b border-club-ink/10 last:border-0">
+                  <td className="px-5 py-4 font-mono-club text-[10px] text-club-green">{u.id}</td>
+                  <td className="px-5 py-4 font-medium text-club-ink">{u.name}</td>
+                  <td className="px-5 py-4 text-club-ink/70">{u.title}</td>
                   <td className="px-5 py-4">
-                    <button onClick={() => setActiveRole(u.role)} className="text-[10px] font-bold tracking-[.1em] text-[#2E6B4E] hover:underline">
+                    <button onClick={() => setActiveRole(u.role)} className="text-[10px] font-bold tracking-[.1em] text-club-green hover:underline">
                       {ROLES.find((r) => r.id === u.role)?.label.toUpperCase()}
                     </button>
                   </td>
@@ -62,23 +62,23 @@ export default function AdminUsersRoles() {
 
       <section className="mt-10">
         <SectionLabel>PERMISSION MATRIX</SectionLabel>
-        <h2 className="font-display mt-2 text-4xl text-[#12372A]">What each role can do.</h2>
+        <h2 className="font-display mt-2 text-4xl text-club-ink">What each role can do.</h2>
         <div className="mt-5 flex flex-wrap gap-2">
           {ROLES.map((r) => (
             <button
               key={r.id}
               onClick={() => setActiveRole(r.id)}
-              className={`border px-4 py-2 text-[10px] font-bold tracking-[.12em] transition-colors ${activeRole === r.id ? 'border-[#2E6B4E] bg-[#2E6B4E] text-white' : 'border-[#12372A]/20 text-[#5d6b63] hover:border-[#2E6B4E]'}`}
+              className={`border px-4 py-2 text-[10px] font-bold tracking-[.12em] transition-colors ${activeRole === r.id ? 'border-club-green bg-club-green text-white' : 'border-club-ink/20 text-club-ink/70 hover:border-club-green'}`}
               data-testid={`button-role-${r.id}`}
             >
               {r.label.toUpperCase()}
             </button>
           ))}
         </div>
-        <p className="mt-4 max-w-2xl text-sm leading-6 text-[#5d6b63]">{role.description}</p>
-        <div className="mt-5 overflow-x-auto border border-[#12372A]/10 bg-[#F7F5EF]">
+        <p className="mt-4 max-w-2xl text-sm leading-6 text-club-ink/70">{role.description}</p>
+        <div className="mt-5 overflow-x-auto border border-club-ink/10 bg-club-white">
           <table className="w-full min-w-[700px] text-left text-sm">
-            <thead className="border-b border-[#12372A]/10 bg-[#e8e9df] font-mono-club text-[9px] tracking-[.12em] text-[#5d6b63]">
+            <thead className="border-b border-club-ink/10 bg-club-gold/10 font-mono-club text-[9px] tracking-[.12em] text-club-ink/70">
               <tr>
                 <th className="px-5 py-4">MODULE</th>
                 {ACTIONS.map((a) => <th key={a} className="px-5 py-4 text-center">{a.toUpperCase()}</th>)}
@@ -86,16 +86,16 @@ export default function AdminUsersRoles() {
             </thead>
             <tbody>
               {PERMISSION_MODULES.map((mod) => (
-                <tr key={mod.id} className="border-b border-[#12372A]/10 last:border-0">
-                  <td className="px-5 py-4 font-medium text-[#12372A]">{mod.label}</td>
+                <tr key={mod.id} className="border-b border-club-ink/10 last:border-0">
+                  <td className="px-5 py-4 font-medium text-club-ink">{mod.label}</td>
                   {ACTIONS.map((action) => {
                     const granted = role.permissions[mod.id]?.includes(action);
                     return (
                       <td key={action} className="px-5 py-4 text-center">
                         {granted ? (
-                          <span className="mx-auto grid h-6 w-6 place-items-center rounded-full bg-[#2E6B4E]/15 text-[#2E6B4E]"><Check size={13} /></span>
+                          <span className="mx-auto grid h-6 w-6 place-items-center rounded-full bg-club-green/15 text-club-green"><Check size={13} /></span>
                         ) : (
-                          <span className="text-[#d8dcd3]">—</span>
+                          <span className="text-club-ink/25">—</span>
                         )}
                       </td>
                     );

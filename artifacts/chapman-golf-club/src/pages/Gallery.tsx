@@ -20,7 +20,7 @@ export default function Gallery() {
   const filtered = category === 'All' ? galleryItems : galleryItems.filter((g) => g.category === category);
 
   return (
-    <div className="bg-[#12372A] text-[#F7F5EF]">
+    <div className="bg-club-green text-club-white">
       <Header />
       <main className="mx-auto max-w-[1480px] px-5 pb-24 pt-36 md:px-10 md:pt-48">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
@@ -35,7 +35,7 @@ export default function Gallery() {
           </div>
           <button
             onClick={() => setShowStoryForm(true)}
-            className="flex items-center gap-2 self-start border border-[#C8A951] px-5 py-3 text-[10px] font-bold tracking-[.14em] text-[#C8A951] hover:bg-[#C8A951]/10"
+            className="flex items-center gap-2 self-start border border-club-gold px-5 py-3 text-[10px] font-bold tracking-[.14em] text-club-gold hover:bg-club-gold/10"
             data-testid="button-open-story-form"
           >
             <Plus size={14} /> SHARE YOUR ROUND
@@ -47,7 +47,7 @@ export default function Gallery() {
             <button
               key={c}
               onClick={() => setCategory(c)}
-              className={`border px-4 py-2 text-[10px] font-bold tracking-[.12em] transition-colors ${category === c ? 'border-[#C8A951] bg-[#C8A951] text-[#17201C]' : 'border-white/25 text-white/70 hover:border-[#C8A951]'}`}
+              className={`border px-4 py-2 text-[10px] font-bold tracking-[.12em] transition-colors ${category === c ? 'border-club-gold bg-club-gold text-club-ink' : 'border-white/25 text-white/70 hover:border-club-gold'}`}
               data-testid={`button-gallery-filter-${c.toLowerCase()}`}
             >
               {c.toUpperCase()}
@@ -64,7 +64,7 @@ export default function Gallery() {
               data-testid={`button-gallery-${i}`}
             >
               <img src={item.src} alt={item.label} className="image-zoom block w-full" />
-              <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#12372A]/80 p-4 pt-10 text-left font-mono-club text-[9px] tracking-[.1em] text-white/85 opacity-0 transition-opacity group-hover:opacity-100">
+              <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-club-ink/80 p-4 pt-10 text-left font-mono-club text-[9px] tracking-[.1em] text-white/85 opacity-0 transition-opacity group-hover:opacity-100">
                 {item.label.toUpperCase()}
               </span>
             </button>
@@ -79,7 +79,7 @@ export default function Gallery() {
               {approvedStories.map((story) => (
                 <div key={story.id} className="border border-white/15 p-5">
                   {story.photoDataUrl && <img src={story.photoDataUrl} alt="" className="mb-4 h-40 w-full object-cover" />}
-                  <p className="font-mono-club text-[9px] tracking-[.14em] text-[#C8A951]">SCORE {story.score}</p>
+                  <p className="font-mono-club text-[9px] tracking-[.14em] text-club-gold">SCORE {story.score}</p>
                   <p className="mt-3 text-sm leading-6 text-white/75">{story.description}</p>
                   <p className="mt-4 font-mono-club text-[9px] tracking-[.12em] text-white/40">— {story.memberName.toUpperCase()}</p>
                 </div>
@@ -90,7 +90,7 @@ export default function Gallery() {
       </main>
 
       {selected !== null && filtered.length > 0 && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-[#12372A]/95 p-5" role="dialog" aria-label="Gallery preview">
+        <div className="fixed inset-0 z-50 grid place-items-center bg-club-ink/95 p-5" role="dialog" aria-label="Gallery preview">
           <button onClick={() => setSelected(null)} className="absolute right-5 top-5 grid h-11 w-11 place-items-center border border-white/25 text-white" data-testid="button-gallery-close">
             <X size={19} />
           </button>

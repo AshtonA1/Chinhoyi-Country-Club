@@ -23,7 +23,15 @@ export const STORE_KEYS = {
 
 export function useHoles() {
   const store = useLocalCollection<Hole>(STORE_KEYS.holes, defaultHoles);
-  const items = useMemo(() => sortHoles(store.items), [store.items]);
+  // Holes saved in a browser before videos existed have no video fields: fill them from the club defaults.
+  const items = useMemo(
+    () => sortHoles(store.items).map((h) => {
+      if (h.video !== undefined) return h;
+      const d = defaultHoles.find((x) => x.number === h.number);
+      return { ...h, video: d?.video ?? '', videoPoster: d?.videoPoster ?? '' };
+    }),
+    [store.items],
+  );
   return { ...store, items };
 }
 

@@ -1,12 +1,46 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'wouter';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Footer } from '@/components/layout/Footer';
 import { PageIntro, SectionLabel, usePageMeta } from '@/components/layout/Shared';
 import { TeeToggle } from '@/components/TeeToggle';
+import type { Hole } from '@/data/club';
 import { useHoles } from '@/lib/club-data';
 import type { TeeKey } from '@/lib/scorecard';
 import NotFound from '@/pages/not-found';
+
+/** The hole's fly-over video when there is one, otherwise its photo. The video only downloads when pressed play. */
+function HoleMedia({ hole }: { hole: Hole }) {
+  const src = (hole.video ?? '').trim();
+  const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [src]);
+  const showVideo = src !== '' && !failed;
+  return (
+    <>
+      <div className="relative aspect-[16/9] overflow-hidden bg-club-ink">
+        {showVideo ? (
+          <video
+            key={src}
+            src={src}
+            poster={(hole.videoPoster ?? '').trim() || hole.image}
+            controls
+            playsInline
+            preload="none"
+            onError={() => setFailed(true)}
+            aria-label={`Fly-over video of hole ${hole.number}`}
+            className="absolute inset-0 h-full w-full bg-club-ink object-cover"
+            data-testid="video-hole-flyover"
+          />
+        ) : (
+          <img src={hole.image} alt={`Hole ${hole.number}`} className="absolute inset-0 h-full w-full object-cover opacity-80" />
+        )}
+      </div>
+      <p className="mt-3 font-mono-club text-[9px] tracking-[.14em] text-club-ink/70">
+        {showVideo ? `FLY-OVER · HOLE ${hole.number} · PRESS PLAY (THE VIDEO ONLY LOADS WHEN YOU DO)` : `HOLE ${hole.number}`}
+      </p>
+    </>
+  );
+}
 
 export default function HoleDetail() {
   const params = useParams<{ holeNumber: string }>();
@@ -28,7 +62,7 @@ export default function HoleDetail() {
   const title = hole.name || `Hole ${hole.number}`;
 
   return (
-    <div className="bg-[#F7F5EF]">
+    <div className="bg-club-white">
       <PageIntro
         eyebrow={`HOLE ${String(hole.number).padStart(2, '0')} · PAR ${t.par} · ${t.metres} METRES`}
         title={title}
@@ -38,53 +72,50 @@ export default function HoleDetail() {
       <main>
         <section className="mx-auto grid max-w-[1480px] gap-12 px-5 py-16 md:grid-cols-12 md:px-10 md:py-24">
           <div className="md:col-span-7">
-            <div className="relative aspect-[16/9] overflow-hidden bg-[#12372A]">
-              <img src={hole.image} alt={`Hole ${hole.number}`} className="absolute inset-0 h-full w-full object-cover opacity-80" />
-            </div>
-            <p className="mt-3 font-mono-club text-[9px] tracking-[.14em] text-[#5d6b63]">HOLE {hole.number}</p>
+            <HoleMedia hole={hole} />
           </div>
           <div className="md:col-span-4 md:col-start-9">
             <TeeToggle value={tee} onChange={setTee} />
-            <div className="mt-6 border-t border-[#12372A]/20 pt-4">
+            <div className="mt-6 border-t border-club-ink/20 pt-4">
               {([['PAR', t.par], ['METRES', t.metres], ['STROKE INDEX', t.stroke]] as const).map(([label, value]) => (
                 <div key={label} className="flex justify-between py-2 font-mono-club text-[10px]">
-                  <span className="text-[#5d6b63]">{label}</span><span className="text-[#12372A]">{value}</span>
+                  <span className="text-club-ink/70">{label}</span><span className="text-club-ink">{value}</span>
                 </div>
               ))}
             </div>
             {hole.description && (
               <div className="mt-8">
                 <SectionLabel>THE PLAY</SectionLabel>
-                <p className="mt-4 text-lg leading-8 text-[#12372A]">{hole.description}</p>
+                <p className="mt-4 text-lg leading-8 text-club-ink">{hole.description}</p>
               </div>
             )}
             {hole.hazards.length > 0 && (
               <div className="mt-8">
-                <p className="font-mono-club text-[9px] tracking-[.15em] text-[#2E6B4E]">WATCH FOR</p>
-                <ul className="mt-3 grid gap-2 text-sm text-[#5d6b63]">
-                  {hole.hazards.map((h) => <li key={h} className="flex gap-2"><span className="text-[#C8A951]">—</span>{h}</li>)}
+                <p className="font-mono-club text-[9px] tracking-[.15em] text-club-green">WATCH FOR</p>
+                <ul className="mt-3 grid gap-2 text-sm text-club-ink/70">
+                  {hole.hazards.map((h) => <li key={h} className="flex gap-2"><span className="text-club-gold">—</span>{h}</li>)}
                 </ul>
               </div>
             )}
             {hole.proTip && (
-              <div className="mt-8 border border-[#C8A951]/40 bg-[#fbf3d8] p-5">
-                <p className="font-mono-club text-[9px] tracking-[.15em] text-[#8b6e16]">TIP</p>
-                <p className="mt-2 text-sm leading-6 text-[#5d4a12]">{hole.proTip}</p>
+              <div className="mt-8 border border-club-gold/40 bg-club-gold/15 p-5">
+                <p className="font-mono-club text-[9px] tracking-[.15em] text-club-gold-deep">TIP</p>
+                <p className="mt-2 text-sm leading-6 text-club-ink">{hole.proTip}</p>
               </div>
             )}
           </div>
         </section>
-        <section className="bg-[#e8e9df] py-16 md:py-24">
+        <section className="on-gold py-16 md:py-24">
           <div className="mx-auto max-w-[1480px] px-5 md:px-10">
             <div className="flex items-center justify-between gap-4">
-              <Link href={`/course/hole/${previous.number}`} className="flex items-center gap-2 text-[10px] font-bold tracking-[.15em] text-[#2E6B4E]" data-testid="link-previous-hole">
+              <Link href={`/course/hole/${previous.number}`} className="flex items-center gap-2 text-[10px] font-bold tracking-[.15em] text-club-green" data-testid="link-previous-hole">
                 <ChevronLeft size={17} /> <span className="hidden sm:inline">PREVIOUS</span>
-                <span className="font-display text-xl normal-case tracking-normal text-[#12372A]">{previous.number}</span>
+                <span className="font-display text-xl normal-case tracking-normal text-club-ink">{previous.number}</span>
               </Link>
-              <div className="font-mono-club text-[9px] tracking-[.15em] text-[#5d6b63]">
+              <div className="font-mono-club text-[9px] tracking-[.15em] text-club-ink/70">
                 <Link href="/course" className="hidden sm:inline">ALL HOLES</Link>
                 <select
-                  className="bg-transparent text-[#12372A] sm:hidden"
+                  className="bg-transparent text-club-ink sm:hidden"
                   aria-label="Select a hole"
                   value={hole.number}
                   onChange={(e) => navigate(`/course/hole/${e.target.value}`)}
@@ -93,8 +124,8 @@ export default function HoleDetail() {
                   {holes.map((item) => <option key={item.id} value={item.number}>{String(item.number).padStart(2, '0')}{item.name ? ` · ${item.name}` : ''}</option>)}
                 </select>
               </div>
-              <Link href={`/course/hole/${next.number}`} className="flex items-center gap-2 text-[10px] font-bold tracking-[.15em] text-[#2E6B4E]" data-testid="link-next-hole">
-                <span className="font-display text-xl normal-case tracking-normal text-[#12372A]">{next.number}</span>
+              <Link href={`/course/hole/${next.number}`} className="flex items-center gap-2 text-[10px] font-bold tracking-[.15em] text-club-green" data-testid="link-next-hole">
+                <span className="font-display text-xl normal-case tracking-normal text-club-ink">{next.number}</span>
                 <span className="hidden sm:inline">NEXT</span><ChevronRight size={17} />
               </Link>
             </div>

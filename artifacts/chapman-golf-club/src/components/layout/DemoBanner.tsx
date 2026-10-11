@@ -19,10 +19,10 @@ export function DemoBanner() {
   return (
     <div
       role="note"
-      className="fixed bottom-3 left-3 z-[60] flex max-w-[calc(100vw-1.5rem)] items-center gap-3 border border-[#C8A951]/60 bg-[#12372A] py-2 pl-3 pr-2 text-[#F7F5EF] shadow-lg"
+      className="fixed bottom-3 left-3 z-[60] flex max-w-[calc(100vw-1.5rem)] items-center gap-3 border border-club-gold/60 bg-club-ink py-2 pl-3 pr-2 text-club-white shadow-lg"
       data-testid="demo-banner"
     >
-      <span className="font-mono-club text-[9px] font-bold tracking-[.16em] text-[#C8A951]">PREVIEW</span>
+      <span className="font-mono-club text-[9px] font-bold tracking-[.16em] text-club-gold">PREVIEW</span>
       <span className="text-[11px] leading-4 text-white/80">Draft for review: some details are sample data.</span>
       <button
         onClick={() => {
