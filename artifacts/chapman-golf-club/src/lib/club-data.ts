@@ -26,9 +26,10 @@ export function useHoles() {
   // Holes saved in a browser before videos existed have no video fields: fill them from the club defaults.
   const items = useMemo(
     () => sortHoles(store.items).map((h) => {
-      if (h.video !== undefined) return h;
+      // Missing OR empty video on a hole that ships with one -> use the club default.
+      if (h.video !== undefined && h.video.trim() !== '') return h;
       const d = defaultHoles.find((x) => x.number === h.number);
-      return { ...h, video: d?.video ?? '', videoPoster: d?.videoPoster ?? '' };
+      return { ...h, video: d?.video ?? '', videoPoster: h.videoPoster?.trim() ? h.videoPoster : d?.videoPoster ?? '' };
     }),
     [store.items],
   );

@@ -12,31 +12,41 @@ import NotFound from '@/pages/not-found';
 /** The hole's fly-over video when there is one, otherwise its photo. The video only downloads when pressed play. */
 function HoleMedia({ hole }: { hole: Hole }) {
   const src = (hole.video ?? '').trim();
-  const [failed, setFailed] = useState(false);
-  useEffect(() => setFailed(false), [src]);
-  const showVideo = src !== '' && !failed;
+  const [error, setError] = useState('');
+  useEffect(() => setError(''), [src]);
+  const poster = (hole.videoPoster ?? '').trim();
   return (
     <>
       <div className="relative aspect-[16/9] overflow-hidden bg-club-ink">
-        {showVideo ? (
+        {src !== '' ? (
           <video
             key={src}
-            src={src}
-            poster={(hole.videoPoster ?? '').trim() || hole.image}
+            poster={poster || undefined}
             controls
             playsInline
-            preload="none"
-            onError={() => setFailed(true)}
+            preload="metadata"
+            onError={(e) => {
+              const code = e.currentTarget.error?.code ?? 0;
+              setError(`code ${code}`);
+              console.error('Hole video failed', src, e.currentTarget.error);
+            }}
             aria-label={`Fly-over video of hole ${hole.number}`}
-            className="absolute inset-0 h-full w-full bg-club-ink object-cover"
+            className="absolute inset-0 h-full w-full bg-club-ink object-contain"
             data-testid="video-hole-flyover"
-          />
+          >
+            <source src={src} type="video/mp4" onError={() => setError('file not found or not an mp4')} />
+          </video>
         ) : (
           <img src={hole.image} alt={`Hole ${hole.number}`} className="absolute inset-0 h-full w-full object-cover opacity-80" />
         )}
+        {error && (
+          <div className="absolute inset-x-0 bottom-0 bg-club-alert px-4 py-2 text-xs text-white">
+            Video could not load ({error}). <a className="underline" href={src} target="_blank" rel="noreferrer">Open the file directly</a>
+          </div>
+        )}
       </div>
       <p className="mt-3 font-mono-club text-[9px] tracking-[.14em] text-club-ink/70">
-        {showVideo ? `FLY-OVER · HOLE ${hole.number} · PRESS PLAY (THE VIDEO ONLY LOADS WHEN YOU DO)` : `HOLE ${hole.number}`}
+        {src !== '' ? `FLY-OVER · HOLE ${hole.number}` : `HOLE ${hole.number}`}
       </p>
     </>
   );
