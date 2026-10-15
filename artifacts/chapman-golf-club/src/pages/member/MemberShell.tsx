@@ -7,6 +7,7 @@ import { Brand } from '@/components/layout/Brand';
 import { SectionLabel } from '@/components/layout/Shared';
 import { SampleChip } from '@/components/layout/Portal';
 import { sampleMember } from '@/data/sample';
+import { useAuth } from '@/lib/auth';
 
 const memberNav = [
   { label: 'Overview', href: '/member/dashboard', icon: LayoutDashboard },
@@ -25,14 +26,17 @@ function greeting(): string {
 export function MemberShell({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const auth = useAuth();
+  const realName = auth.configured ? (auth.profile?.fullName || auth.profile?.email || 'Member') : '';
+  const firstName = auth.configured ? (realName.split(' ')[0] || 'Member') : sampleMember.firstName;
   return (
     <div className="min-h-dvh bg-club-gold/5 text-club-ink">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-club-ink/10 bg-club-ink px-6 py-7 text-club-white md:flex">
         <Brand light />
         <div className="mt-12 border-y border-white/10 py-5">
           <SectionLabel light>MEMBER ROOM</SectionLabel>
-          <p className="mt-3 font-display text-2xl">{greeting()},<br /><em>{sampleMember.firstName}.</em></p>
-          <div className="mt-3"><SampleChip dark /></div>
+          <p className="mt-3 font-display text-2xl">{greeting()},<br /><em>{firstName}.</em></p>
+          {!auth.configured && <div className="mt-3"><SampleChip dark /></div>}
         </div>
         <nav className="mt-8 grid gap-1" aria-label="Member navigation">
           {memberNav.map((item) => {
@@ -45,6 +49,7 @@ export function MemberShell({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="mt-auto border-t border-white/10 pt-5">
+          {auth.configured && <button onClick={() => void auth.signOut()} className="flex w-full items-center gap-3 px-3 py-3 text-xs text-white/60 hover:text-white" data-testid="button-member-signout"><LogOut size={15} />Sign out</button>}
           <Link href="/" className="flex items-center gap-3 px-3 py-3 text-xs text-white/60 hover:text-white">
             <LogOut size={15} />Back to club website
           </Link>
@@ -59,8 +64,8 @@ export function MemberShell({ children }: { children: ReactNode }) {
           </div>
           <div className="flex items-center gap-3">
             <Link href="/member/profile" className="flex items-center gap-2 border-l border-club-ink/10 pl-3 text-left" aria-label="Open profile">
-              <span className="grid h-9 w-9 place-items-center rounded-full bg-club-gold font-display text-lg text-club-ink">{sampleMember.firstName[0]}</span>
-              <span className="hidden text-xs md:block"><strong className="block text-club-ink">{sampleMember.firstName} {sampleMember.lastName}</strong><small className="text-club-ink/70">Sample member</small></span>
+              <span className="grid h-9 w-9 place-items-center rounded-full bg-club-gold font-display text-lg text-club-ink">{firstName[0]}</span>
+              <span className="hidden text-xs md:block"><strong className="block text-club-ink">{auth.configured ? realName : `${sampleMember.firstName} ${sampleMember.lastName}`}</strong><small className="text-club-ink/70">{auth.configured ? 'Member' : 'Sample member'}</small></span>
             </Link>
             <button className="grid h-10 w-10 place-items-center border border-club-ink/15 md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle member menu">
               {menuOpen ? <X size={18} /> : <Menu size={18} />}

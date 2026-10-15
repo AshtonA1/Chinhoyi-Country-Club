@@ -6,6 +6,8 @@ import { useAddOns, useBookingSettings, usePricing } from '@/lib/club-data';
 import { addDaysIso, formatDate, hasStarted, teeInstant, todayIso } from '@/lib/dates';
 import { formatMoney } from '@/lib/format';
 import { downloadIcsFile } from '@/lib/ics';
+import { DownloadPdfButton } from '@/components/DownloadButtons';
+import { bookingDocument } from '@/lib/documents';
 import { PLAYER_TYPES, type PlayerTypeId, type RoundId, greenFee, quoteBooking } from '@/lib/pricing';
 
 const STEPS = ['Date', 'Time', 'Players', 'Player type', 'Round length', 'Add-ons', 'Your details', 'Summary', 'Confirmation'] as const;
@@ -122,14 +124,7 @@ export function BookingWizard() {
           >
             <Download size={14} /> ADD TO CALENDAR
           </button>
-          <a
-            href={`data:text/plain;charset=utf-8,${encodeURIComponent(`${club.name} — Booking Confirmation\nReference: ${confirmedBooking.reference}\nDate: ${formatDate(confirmedBooking.date)}\nTime: ${confirmedBooking.time}\nPlayers: ${confirmedBooking.players}\nRound: ${confirmedBooking.holes}\nTotal: ${formatMoney(confirmedBooking.totalPrice, sym)} (pay at the club)\nStatus: Requested`)}`}
-            download={`booking-${confirmedBooking.reference}.txt`}
-            className="flex items-center gap-2 border border-club-ink/25 px-5 py-3 text-[10px] font-bold tracking-[.14em] text-club-ink hover:border-club-green"
-            data-testid="link-download-confirmation"
-          >
-            <Download size={14} /> DOWNLOAD CONFIRMATION
-          </a>
+          <DownloadPdfButton build={() => bookingDocument(confirmedBooking, sym)} label="DOWNLOAD CONFIRMATION (PDF)" testId="link-download-confirmation" />
         </div>
       </div>
     );

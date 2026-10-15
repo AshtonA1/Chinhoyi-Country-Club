@@ -25,7 +25,7 @@ export default function MemberCompetitions() {
             <article key={e.id} className="grid gap-5 border border-club-ink/10 bg-club-white p-5 md:grid-cols-12 md:items-center">
               <div className="md:col-span-2"><p className="font-display text-4xl text-club-ink">{p.day}</p><p className="font-mono-club text-[9px] tracking-[.14em] text-club-green">{p.month} · {p.weekday}</p></div>
               <div className="md:col-span-5">
-                <p className="font-mono-club text-[9px] tracking-[.14em] text-club-green">{e.type.toUpperCase()}{e.status === 'proposed' ? ' · PROPOSED' : ''}</p>
+                <p className="font-mono-club text-[9px] tracking-[.14em] text-club-green">{e.type.toUpperCase()}</p>
                 <Link href={`/events/${e.id}`} className="mt-2 block font-display text-3xl text-club-ink hover:text-club-green">{e.title}</Link>
               </div>
               <p className="text-sm text-club-ink/70 md:col-span-3">{e.entryFee ? `Entry ${e.entryFee}` : 'Entry fee to be confirmed'}</p>

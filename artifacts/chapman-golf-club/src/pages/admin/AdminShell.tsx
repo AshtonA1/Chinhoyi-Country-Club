@@ -6,6 +6,8 @@ import {
 } from 'lucide-react';
 import { SampleChip } from '@/components/layout/Portal';
 import { sampleAdmin } from '@/data/sample';
+import { getRole } from '@/lib/permissions';
+import { useAuth } from '@/lib/auth';
 
 export const adminNav = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -31,6 +33,9 @@ function greeting(): string {
 export function AdminShell({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const auth = useAuth();
+  const shownName = auth.configured ? (auth.profile?.fullName || auth.profile?.email || 'Staff') : sampleAdmin.name;
+  const shownTitle = auth.configured ? (getRole(auth.role)?.label ?? 'Staff') : sampleAdmin.title;
   return (
     <div className="min-h-dvh bg-club-gold/5 text-club-ink">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col bg-club-ink px-5 py-6 text-club-white md:flex">
@@ -54,7 +59,9 @@ export function AdminShell({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="mt-auto border-t border-white/10 pt-4">
-          <Link href="/" className="flex items-center gap-3 px-3 py-2 text-xs text-white/50 hover:text-white"><LogOut size={15} />Exit portal</Link>
+          {auth.configured
+            ? <button onClick={() => void auth.signOut()} className="flex w-full items-center gap-3 px-3 py-2 text-xs text-white/50 hover:text-white" data-testid="button-admin-signout"><LogOut size={15} />Sign out</button>
+            : <Link href="/" className="flex items-center gap-3 px-3 py-2 text-xs text-white/50 hover:text-white"><LogOut size={15} />Exit portal</Link>}
         </div>
       </aside>
       <div className="md:pl-64">
@@ -65,7 +72,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
           </div>
           <div className="flex items-center gap-3">
             <span className="hidden border-l border-club-ink/10 pl-3 text-xs md:block">
-              <strong className="block text-club-ink">{sampleAdmin.name}</strong><small className="flex items-center gap-1 text-club-ink/70">{sampleAdmin.title} <SampleChip /></small>
+              <strong className="block text-club-ink">{shownName}</strong><small className="flex items-center gap-1 text-club-ink/70">{shownTitle} {!auth.configured && <SampleChip />}</small>
             </span>
             <button className="grid h-10 w-10 place-items-center border border-club-ink/15 md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle admin menu">
               {menuOpen ? <X size={18} /> : <Menu size={18} />}

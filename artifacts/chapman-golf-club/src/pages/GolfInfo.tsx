@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Printer } from 'lucide-react';
+import { DownloadPdfButton } from '@/components/DownloadButtons';
 import { Footer } from '@/components/layout/Footer';
 import { PageIntro, SectionLabel, usePageMeta } from '@/components/layout/Shared';
 import { TeeToggle } from '@/components/TeeToggle';
 import { club, golfInfo, images } from '@/data/club';
 import { useCourseConfig, useHoles } from '@/lib/club-data';
 import { formatNumber } from '@/lib/format';
+import { scorecardDocument } from '@/lib/documents';
 import { backNine, frontNine, teeRating, teeTotals, type TeeKey } from '@/lib/scorecard';
 import type { Hole } from '@/data/club';
 
@@ -43,10 +44,9 @@ function Half({ holes, label, tee, par, metres }: { holes: Hole[]; label: string
   );
 }
 
-function ScorecardTable() {
+function ScorecardTable({ tee, setTee }: { tee: TeeKey; setTee: (t: TeeKey) => void }) {
   const { items: holes } = useHoles();
   const { value: course } = useCourseConfig();
-  const [tee, setTee] = useState<TeeKey>('men');
   const totals = teeTotals(holes, course, tee);
   const rating = teeRating(course, tee);
   return (
@@ -84,10 +84,9 @@ export default function GolfInfo() {
   usePageMeta('Golf Information', 'Scorecard, course rules, local rules and etiquette.');
   const TABS = BASE_TABS.filter((t) => t !== 'Hazards' || golfInfo.hazardsOverview.length > 0);
   const [tab, setTab] = useState<Tab>('Scorecard');
-
-  function handlePrint() {
-    window.print();
-  }
+  const [tee, setTee] = useState<TeeKey>('men');
+  const { items: holes } = useHoles();
+  const { value: course } = useCourseConfig();
 
   return (
     <div className="bg-club-white">
@@ -105,13 +104,7 @@ export default function GolfInfo() {
             </button>
           ))}
           {tab === 'Scorecard' && (
-            <button
-              onClick={handlePrint}
-              className="ml-auto flex items-center gap-2 bg-club-green px-4 py-2 text-[10px] font-bold tracking-[.12em] text-club-white hover:bg-club-ink"
-              data-testid="button-download-scorecard"
-            >
-              <Printer size={13} /> DOWNLOAD / PRINT PDF
-            </button>
+            <span className="ml-auto"><DownloadPdfButton variant="solid" label="DOWNLOAD SCORECARD (PDF)" build={() => scorecardDocument(holes, course, tee)} testId="button-download-scorecard" /></span>
           )}
         </div>
 
@@ -121,9 +114,9 @@ export default function GolfInfo() {
               <SectionLabel>SCORECARD · PAR 72</SectionLabel>
               <h2 className="font-display mt-4 text-4xl text-club-ink md:text-5xl">{club.name}</h2>
               <p className="mt-3 max-w-xl text-sm leading-6 text-club-ink/70">
-                Use "Download / Print PDF" to save this scorecard using your browser's print dialog — choose "Save as PDF" as the destination.
+                Download a printable A4 scorecard for the tees you choose, with space for four players to write their scores.
               </p>
-              <div className="mt-8"><ScorecardTable /></div>
+              <div className="mt-8"><ScorecardTable tee={tee} setTee={setTee} /></div>
             </>
           )}
           {tab === 'Course rules' && <RuleList label="COURSE RULES" lines={golfInfo.courseRules} />}

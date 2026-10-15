@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { isRemoteKey, useRemoteCollection, useRemoteObject } from '@/lib/remote-store';
 
 /**
  * Browser-side persistence for the demo.
@@ -112,7 +113,7 @@ function useStoreListener(key: string, reload: () => void) {
  * `seed` should be a module-level constant (it is only used when the key is empty).
  * Every mutator returns whether the change was saved to the browser.
  */
-export function useLocalCollection<T extends { id: string }>(key: string, seed: T[] = []) {
+function useBrowserCollection<T extends { id: string }>(key: string, seed: T[] = []) {
   const seedRef = useRef(seed);
   seedRef.current = seed;
   const [items, setItems] = useState<T[]>(() => readCollection<T>(key, seed));
@@ -154,7 +155,7 @@ export function useLocalCollection<T extends { id: string }>(key: string, seed: 
 }
 
 /** A single settings object (e.g. fees). `defaults` should be a module-level constant. */
-export function useLocalObject<T extends object>(key: string, defaults: T) {
+function useBrowserObject<T extends object>(key: string, defaults: T) {
   const defaultsRef = useRef(defaults);
   defaultsRef.current = defaults;
   const [value, setValue] = useState<T>(() => readObject<T>(key, defaults));
@@ -187,4 +188,18 @@ export function useLocalObject<T extends object>(key: string, defaults: T) {
   }, [key]);
 
   return { value, set, replace, reset };
+}
+
+/**
+ * The two hooks every page uses. When the Supabase settings are present and the
+ * key is one the server stores, data lives on the server (see remote-store.ts);
+ * otherwise it stays in this browser. The choice depends only on the key and the
+ * build, never on render state, so a call site always runs the same branch.
+ */
+export function useLocalCollection<T extends { id: string }>(key: string, seed: T[] = []) {
+  return isRemoteKey(key) ? useRemoteCollection<T>(key, seed) : useBrowserCollection<T>(key, seed);
+}
+
+export function useLocalObject<T extends object>(key: string, defaults: T) {
+  return isRemoteKey(key) ? useRemoteObject<T>(key, defaults) : useBrowserObject<T>(key, defaults);
 }

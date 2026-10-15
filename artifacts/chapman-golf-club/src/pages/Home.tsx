@@ -161,7 +161,7 @@ export default function Home() {
                         day={p.day}
                         month={p.month}
                         title={e.title}
-                        meta={`${e.type}${e.status === 'proposed' ? ' · Proposed date' : ''}${e.time ? ` · ${e.time}` : ''}`}
+                        meta={`${e.type}${e.time ? ` · ${e.time}` : ''}`}
                       />
                     );
                   })}

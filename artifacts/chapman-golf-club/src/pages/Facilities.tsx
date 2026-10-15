@@ -17,7 +17,14 @@ export default function Facilities() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {facilities.map((f) => (
             <article key={f.id} className="on-gold flex flex-col overflow-hidden border border-club-ink/10" data-testid={`card-facility-${f.id}`}>
-              {f.image && <img src={f.image} alt={f.title} className="h-48 w-full object-cover" />}
+              {f.image ? (
+                <img src={f.image} alt={f.title} className="h-48 w-full object-cover" />
+              ) : (
+                <div className="relative flex h-48 w-full items-center justify-center border-b border-club-ink/10 bg-club-white/50 text-club-ink" data-testid={`placeholder-facility-${f.id}`}>
+                  <FacilityIcon icon={f.icon} size={48} className="text-club-ink" />
+                  <span className="absolute bottom-3 left-4 font-mono-club text-[8px] tracking-[.16em] text-club-ink">PHOTO COMING SOON</span>
+                </div>
+              )}
               <div className="flex flex-1 flex-col p-6">
                 <FacilityIcon icon={f.icon} size={30} className="text-club-gold" />
                 <h2 className="font-display mt-6 text-3xl text-club-ink">{f.title}</h2>

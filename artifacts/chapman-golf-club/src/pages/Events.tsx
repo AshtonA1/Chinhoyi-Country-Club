@@ -17,7 +17,6 @@ export default function Events() {
   const [filter, setFilter] = useState('All');
   const active = types.includes(filter) ? filter : 'All';
   const filtered = active === 'All' ? shown : shown.filter((e) => e.type === active);
-  const hasProposed = filtered.some((e) => e.status === 'proposed');
 
   return (
     <div className="bg-club-white">
@@ -46,11 +45,6 @@ export default function Events() {
         </div>
       </section>
       <main className="mx-auto max-w-[1100px] px-5 py-20 md:px-10 md:py-28">
-        {hasProposed && (
-          <p className="mt-5 border-l-2 border-club-gold bg-club-gold/15 px-4 py-3 text-xs leading-5 text-club-ink">
-            Events marked <strong>Proposed</strong> are on the Captain’s proposed programme and are subject to approval. Dates may change.
-          </p>
-        )}
         <div>
           {filtered.map((e) => {
             const p = dateParts(e.date);
@@ -60,14 +54,15 @@ export default function Events() {
                   <span className="font-display text-5xl leading-none text-club-ink">{p.day}</span>
                   <span className="font-mono-club text-[9px] tracking-[.14em] text-club-green">{p.month}<br />{p.weekday}</span>
                 </div>
-                <div className="md:col-span-4">
+                <div className="flex items-start gap-4 md:col-span-4">
+                  {e.poster && <img src={e.poster} alt={`${e.title} poster`} className="h-28 w-20 shrink-0 object-cover" />}
+                  <div>
                   <p className="font-mono-club text-[9px] tracking-[.15em] text-club-green">{e.type.toUpperCase()}</p>
                   <h3 className="font-display mt-2 text-3xl leading-none text-club-ink">{e.title}</h3>
-                  {e.status !== 'confirmed' && (
-                    <span className={`mt-3 inline-block border px-2 py-0.5 font-mono-club text-[8px] font-bold tracking-[.12em] ${e.status === 'cancelled' ? 'border-club-alert/40 text-club-alert' : 'border-club-gold bg-club-gold/15 text-club-gold-deep'}`}>
-                      {e.status === 'cancelled' ? 'CANCELLED' : 'PROPOSED'}
-                    </span>
+                  {e.status === 'cancelled' && (
+                    <span className="mt-3 inline-block border border-club-alert/40 px-2 py-0.5 font-mono-club text-[8px] font-bold tracking-[.12em] text-club-alert">CANCELLED</span>
                   )}
+                  </div>
                 </div>
                 <p className="text-sm leading-6 text-club-ink/70 md:col-span-4">{e.text}</p>
                 <span className="flex items-center gap-2 text-[10px] font-bold tracking-[.13em] text-club-green md:col-span-2 md:justify-end">

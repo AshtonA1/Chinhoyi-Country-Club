@@ -3,7 +3,8 @@ import { CalendarCheck, ArrowUpRight } from 'lucide-react';
 import { MemberShell, PortalHeading } from './MemberShell';
 import { SectionLabel, usePageMeta } from '@/components/layout/Shared';
 import { SampleChip } from '@/components/layout/Portal';
-import { club } from '@/data/club';
+import { DownloadPdfButton } from '@/components/DownloadButtons';
+import { bookingDocument, roundReceiptDocument } from '@/lib/documents';
 import { samplePastRounds } from '@/data/sample';
 import { byDateAsc, canCancel, isUpcomingBooking, useBookings } from '@/lib/bookings';
 import { useBookingSettings, usePricing } from '@/lib/club-data';
@@ -40,13 +41,16 @@ export default function MemberTeeTimes() {
                 </div>
               </div>
               <p className="text-sm text-club-ink/70 sm:ml-8">{t.players} {t.players === 1 ? 'player' : 'players'} · {t.holes} · {formatMoney(t.totalPrice, pricing.currencySymbol)} · {t.status}</p>
-              {canCancel(t, settings) ? (
-                <button onClick={() => update(t.id, { status: 'Cancelled' })} className="text-[10px] font-bold tracking-[.13em] text-club-green sm:ml-auto" data-testid={`button-cancel-${t.id}`}>
-                  CANCEL REQUEST
-                </button>
-              ) : (
-                <span className="text-xs text-club-ink/50 sm:ml-auto">Within {settings.cancellationHours}h: please contact the club to cancel.</span>
-              )}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 sm:ml-auto">
+                <DownloadPdfButton variant="link" label="CONFIRMATION (PDF)" build={() => bookingDocument(t, pricing.currencySymbol)} testId={`button-pdf-${t.id}`} />
+                {canCancel(t, settings) ? (
+                  <button onClick={() => update(t.id, { status: 'Cancelled' })} className="text-[10px] font-bold tracking-[.13em] text-club-green" data-testid={`button-cancel-${t.id}`}>
+                    CANCEL REQUEST
+                  </button>
+                ) : (
+                  <span className="text-xs text-club-ink/50">Within {settings.cancellationHours}h: please contact the club to cancel.</span>
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -69,20 +73,7 @@ export default function MemberTeeTimes() {
                   <td className="px-5 py-4 text-club-ink/70">{row.detail}</td>
                   <td className="px-5 py-4 font-display text-xl text-club-ink">{row.score}</td>
                   <td className="px-5 py-4">
-                    <button
-                      onClick={() => {
-                        const content = `${club.name} — Sample receipt\n\nDate: ${formatDate(row.date)}\nTee time: ${row.time}\nRound: ${row.detail}\nScore: ${row.score}\n`;
-                        const link = document.createElement('a');
-                        link.href = `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`;
-                        link.download = `sample-receipt-${row.date}.txt`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                      }}
-                      className="text-[10px] font-bold tracking-[.12em] text-club-green"
-                    >
-                      DOWNLOAD <ArrowUpRight size={13} className="inline" />
-                    </button>
+                    <DownloadPdfButton variant="link" label="DOWNLOAD" build={() => roundReceiptDocument(row)} />
                   </td>
                 </tr>
               ))}

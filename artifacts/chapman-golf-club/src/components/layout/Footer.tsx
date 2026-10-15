@@ -63,6 +63,7 @@ export function Footer() {
             <Link href="/golf-info" data-testid="link-footer-golf-info">Golf Info</Link>
             <Link href="/membership" data-testid="link-footer-membership">Membership</Link>
             <Link href="/member/login" data-testid="link-footer-login">Member Login</Link>
+            <Link href="/staff-login" data-testid="link-footer-staff-login">Staff Login</Link>
           </div>
         </div>
         <div className="md:col-span-3">

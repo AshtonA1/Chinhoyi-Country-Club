@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import {
   defaultAddOns, defaultBookingSettings, defaultCourse, defaultEvents, defaultFacilities, defaultHoles,
-  defaultPricing, type AddOn, type EventItem, type FacilityItem, type Hole,
+  defaultPricing, LEGACY_PROGRAMME_NOTE, PROGRAMME_NOTE,
+  type AddOn, type EventEntry, type EventItem, type FacilityItem, type Hole, type SponsorshipRequest,
 } from '@/data/club';
 import { isUpcoming } from '@/lib/dates';
 import { useLocalCollection, useLocalObject } from '@/lib/local-store';
@@ -19,6 +20,8 @@ export const STORE_KEYS = {
   addOns: 'ccc:v1:addons',
   course: 'ccc:v1:course',
   booking: 'ccc:v1:booking',
+  eventEntries: 'ccc:v1:event-entries',
+  sponsorRequests: 'ccc:v1:sponsor-requests',
 } as const;
 
 export function useHoles() {
@@ -38,8 +41,22 @@ export function useHoles() {
 
 export function useEvents() {
   const store = useLocalCollection<EventItem>(STORE_KEYS.events, defaultEvents);
-  const items = useMemo(() => [...store.items].sort((a, b) => a.date.localeCompare(b.date)), [store.items]);
+  const items = useMemo(() => store.items.map(finalEvent).sort((a, b) => a.date.localeCompare(b.date)), [store.items]);
   return { ...store, items };
+}
+
+/** Events saved while the programme was still "proposed" are now final. */
+function finalEvent(e: EventItem): EventItem {
+  if (e.status !== 'proposed') return e;
+  return { ...e, status: 'confirmed', text: e.text.replace(LEGACY_PROGRAMME_NOTE, PROGRAMME_NOTE) };
+}
+
+export function useEventEntries() {
+  return useLocalCollection<EventEntry>(STORE_KEYS.eventEntries);
+}
+
+export function useSponsorRequests() {
+  return useLocalCollection<SponsorshipRequest>(STORE_KEYS.sponsorRequests);
 }
 
 /** Events that have not happened yet and have not been cancelled, soonest first. */

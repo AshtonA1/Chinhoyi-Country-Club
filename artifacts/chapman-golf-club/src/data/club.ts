@@ -35,6 +35,7 @@ export type Hole = {
   videoPoster?: string;
 };
 
+/** 'proposed' is no longer used: saved events that still have it are treated as confirmed. */
 export type EventStatus = 'proposed' | 'confirmed' | 'cancelled';
 
 export type EventItem = {
@@ -52,6 +53,54 @@ export type EventItem = {
   schedule?: string[];
   prizes?: string[];
   rules?: string[];
+  /** Poster image: an uploaded photo (data URL) or a path under /public. Empty = show the poster placeholder. */
+  poster?: string;
+  /** Entry price in USD for one player. Blank = not offered. */
+  singlePrice?: number;
+  /** Entry price in USD for a team of four (four-ball). Blank = not offered. */
+  fourBallPrice?: number;
+  /** Visitors can ask to sponsor this event. */
+  sponsorshipOpen?: boolean;
+  /** Sponsor names thanked on the event page. */
+  sponsors?: string[];
+};
+
+export type EntryFormat = 'single' | 'fourball';
+export type EntryStatus = 'pending_payment' | 'paid' | 'cancelled';
+
+/** An online entry for an event. */
+export type EventEntry = {
+  id: string;
+  ref: string;
+  eventId: string;
+  eventTitle: string;
+  eventDate: string;
+  format: EntryFormat;
+  players: string[];
+  contactName: string;
+  phone: string;
+  email: string;
+  /** Amount due in USD. */
+  total: number;
+  status: EntryStatus;
+  createdAt: string;
+};
+
+export type SponsorStatus = 'new' | 'contacted' | 'confirmed' | 'declined';
+
+/** A company asking to sponsor an event. */
+export type SponsorshipRequest = {
+  id: string;
+  eventId: string;
+  eventTitle: string;
+  company: string;
+  contactName: string;
+  phone: string;
+  email: string;
+  interest: string;
+  message: string;
+  status: SponsorStatus;
+  createdAt: string;
 };
 
 export type FacilityIconId =
@@ -406,13 +455,15 @@ export const defaultBookingSettings: BookingSettings = {
   advanceDays: 60,
 };
 
-const PROGRAMME_NOTE = "A date on the Captain's proposed golf programme for October to December 2026. Entry fee, tee times and format will be confirmed by the club.";
+/** Text used on the Captain's programme events before the dates were made final. Kept only to tidy up saved data. */
+export const LEGACY_PROGRAMME_NOTE = "A date on the Captain's proposed golf programme for October to December 2026. Entry fee, tee times and format will be confirmed by the club.";
+export const PROGRAMME_NOTE = 'A club golf day on the 2026 calendar. Entry fee, tee times and format will be announced by the club.';
 
 function programmeEvent(date: string, title: string, type: string, slug: string): EventItem {
-  return { id: `ev-${slug}`, date, title, type, text: `${title}. ${PROGRAMME_NOTE}`, status: 'proposed' };
+  return { id: `ev-${slug}`, date, title, type, text: `${title}. ${PROGRAMME_NOTE}`, status: 'confirmed', sponsorshipOpen: true };
 }
 
-/** The Captain's proposed golf programme, October to December 2026 (subject to approval). */
+/** The Captain's golf programme, October to December 2026. These dates are final; an admin can edit or delete any of them. */
 export const defaultEvents: EventItem[] = [
   programmeEvent('2026-10-04', 'Monthly Medal', 'Competition', 'monthly-medal-oct'),
   programmeEvent('2026-10-16', 'Munhumutapa Tournament', 'Competition', 'munhumutapa'),

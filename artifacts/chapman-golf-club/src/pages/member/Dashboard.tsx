@@ -63,7 +63,7 @@ export default function MemberDashboard() {
           <h2 className="font-display mt-2 text-4xl text-club-ink">On at the club.</h2>
           {nextEvent && p ? (
             <div className="mt-5 border border-club-ink/10 bg-club-green p-6 text-club-white">
-              <p className="font-mono-club text-[9px] tracking-[.14em] text-club-gold">{p.day} {p.month} · {nextEvent.type.toUpperCase()}{nextEvent.status === 'proposed' ? ' · PROPOSED' : ''}</p>
+              <p className="font-mono-club text-[9px] tracking-[.14em] text-club-gold">{p.day} {p.month} · {nextEvent.type.toUpperCase()}</p>
               <h3 className="mt-4 font-display text-3xl">{nextEvent.title}</h3>
               <Link href="/member/competitions" className="mt-6 inline-flex items-center gap-2 text-[10px] font-bold tracking-[.13em] text-club-gold">VIEW EVENTS <ArrowUpRight size={14} /></Link>
             </div>

@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Pencil, Plus } from 'lucide-react';
+import { ImagePlus, Pencil, Plus } from 'lucide-react';
 import { AdminShell, PortalHeading, PortalStat } from './AdminShell';
 import {
-  AreaField, DeleteButton, GhostButton, Panel, PrimaryButton, SaveNotice, SelectField, StorageNote, TextField, useSaveNotice,
+  AreaField, CheckField, DeleteButton, GhostButton, NumberField, Panel, PrimaryButton, SaveNotice, SelectField, StorageNote, TextField, useSaveNotice,
 } from '@/components/admin/Form';
+import { EventInbox } from '@/components/admin/EventInbox';
 import { EVENT_TYPES, type EventItem, type EventStatus } from '@/data/club';
-import { upcomingEvents, useEvents } from '@/lib/club-data';
+import { upcomingEvents, useEventEntries, useEvents } from '@/lib/club-data';
+import { resizeImage } from '@/lib/image';
 import { formatDate, isIsoDate } from '@/lib/dates';
 import { makeId, splitList } from '@/lib/format';
 import { useCan } from '@/lib/permissions';
@@ -13,17 +15,21 @@ import { useCan } from '@/lib/permissions';
 type Draft = {
   id: string; title: string; date: string; type: string; status: EventStatus; time: string;
   entryFee: string; registrationDeadline: string; text: string; schedule: string; rules: string; prizes: string;
+  poster: string; singlePrice: number | null; fourBallPrice: number | null; sponsorshipOpen: boolean; sponsors: string;
 };
 
 const blank = (): Draft => ({
-  id: makeId('ev'), title: '', date: '', type: 'Competition', status: 'proposed', time: '',
+  id: makeId('ev'), title: '', date: '', type: 'Competition', status: 'confirmed', time: '',
   entryFee: '', registrationDeadline: '', text: '', schedule: '', rules: '', prizes: '',
+  poster: '', singlePrice: null, fourBallPrice: null, sponsorshipOpen: true, sponsors: '',
 });
 
 const toDraft = (e: EventItem): Draft => ({
   id: e.id, title: e.title, date: e.date, type: e.type, status: e.status, time: e.time ?? '',
   entryFee: e.entryFee ?? '', registrationDeadline: e.registrationDeadline ?? '', text: e.text,
   schedule: (e.schedule ?? []).join('\n'), rules: (e.rules ?? []).join('\n'), prizes: (e.prizes ?? []).join('\n'),
+  poster: e.poster ?? '', singlePrice: e.singlePrice ?? null, fourBallPrice: e.fourBallPrice ?? null,
+  sponsorshipOpen: e.sponsorshipOpen ?? false, sponsors: (e.sponsors ?? []).join('\n'),
 });
 
 function toEvent(d: Draft): EventItem {
@@ -33,6 +39,8 @@ function toEvent(d: Draft): EventItem {
     id: d.id, title: d.title.trim(), date: d.date, type: d.type, status: d.status, text: d.text.trim(),
     time: opt(d.time), entryFee: opt(d.entryFee), registrationDeadline: opt(d.registrationDeadline),
     schedule: list(d.schedule), rules: list(d.rules), prizes: list(d.prizes),
+    poster: opt(d.poster), singlePrice: d.singlePrice ?? undefined, fourBallPrice: d.fourBallPrice ?? undefined,
+    sponsorshipOpen: d.sponsorshipOpen, sponsors: list(d.sponsors),
   };
 }
 
@@ -44,6 +52,7 @@ export default function AdminEvents() {
   const { items, add, update, remove, reset } = useEvents();
   const canWrite = useCan('events', 'write');
   const canDelete = useCan('events', 'delete');
+  const entries = useEventEntries();
   const { notice, flash } = useSaveNotice();
   const [draft, setDraft] = useState<Draft | null>(null);
   const [isNew, setIsNew] = useState(false);
@@ -51,6 +60,16 @@ export default function AdminEvents() {
 
   const upcoming = upcomingEvents(items).length;
   const set = (patch: Partial<Draft>) => setDraft((d) => (d ? { ...d, ...patch } : d));
+
+  async function onPoster(file: File | undefined) {
+    if (!file) return;
+    try {
+      set({ poster: await resizeImage(file, 900) });
+      setError('');
+    } catch {
+      setError('That poster could not be used. Try a different image.');
+    }
+  }
 
   function save() {
     if (!draft) return;
@@ -77,7 +96,7 @@ export default function AdminEvents() {
       <div className="mt-8 grid gap-3 md:grid-cols-3">
         <PortalStat label="UPCOMING" value={String(upcoming)} note="Shown on the public site" />
         <PortalStat label="ALL EVENTS" value={String(items.length)} note="Including past and cancelled" />
-        <PortalStat label="PROPOSED" value={String(items.filter((e) => e.status === 'proposed').length)} note="Awaiting approval" />
+        <PortalStat label="ONLINE ENTRIES" value={String(entries.items.length)} note="Received on this browser" />
       </div>
       <div className="mt-4"><SaveNotice notice={notice} /></div>
 
@@ -88,10 +107,37 @@ export default function AdminEvents() {
               <TextField label="Title" value={draft.title} onChange={(v) => set({ title: v })} />
               <TextField label="Date" type="date" value={draft.date} onChange={(v) => set({ date: v })} />
               <SelectField label="Type" value={draft.type} onChange={(v) => set({ type: v })} options={[...new Set([...EVENT_TYPES, draft.type])].map((t) => ({ value: t, label: t }))} />
-              <SelectField label="Status" value={draft.status} onChange={(v) => set({ status: v as EventStatus })} options={[{ value: 'proposed', label: 'Proposed (awaiting approval)' }, { value: 'confirmed', label: 'Confirmed' }, { value: 'cancelled', label: 'Cancelled' }]} />
+              <SelectField label="Status" value={draft.status} onChange={(v) => set({ status: v as EventStatus })} options={[{ value: 'confirmed', label: 'Confirmed' }, { value: 'cancelled', label: 'Cancelled' }]} />
               <TextField label="Start time (optional)" value={draft.time} onChange={(v) => set({ time: v })} placeholder="e.g. 07:00" />
               <TextField label="Entry fee (optional)" value={draft.entryFee} onChange={(v) => set({ entryFee: v })} placeholder="e.g. $10 per player" />
               <TextField label="Registration closes (optional)" value={draft.registrationDeadline} onChange={(v) => set({ registrationDeadline: v })} placeholder="e.g. 10 October" />
+            </div>
+            <div className="mt-6 border-t border-club-ink/10 pt-5">
+              <p className="font-mono-club text-[9px] tracking-[.14em] text-club-ink/70">ENTRY PRICES (USD) · LEAVE BLANK IF NOT OFFERED</p>
+              <div className="mt-3 grid gap-4 md:grid-cols-2">
+                <NumberField label="Single player" value={draft.singlePrice} onChange={(v) => set({ singlePrice: v })} allowEmpty step="0.5" placeholder="e.g. 10" />
+                <NumberField label="Four-ball (team of four)" value={draft.fourBallPrice} onChange={(v) => set({ fourBallPrice: v })} allowEmpty step="0.5" placeholder="e.g. 35" />
+              </div>
+              <p className="mt-2 text-[11px] text-club-ink/70">When a price is set, visitors can enter this event online.</p>
+            </div>
+            <div className="mt-6 border-t border-club-ink/10 pt-5">
+              <p className="font-mono-club text-[9px] tracking-[.14em] text-club-ink/70">POSTER</p>
+              <label className="mt-3 inline-flex cursor-pointer items-center gap-2 border border-club-ink/20 bg-white px-4 py-3 text-xs font-bold tracking-[.1em] text-club-ink">
+                <ImagePlus size={16} className="text-club-green" /> {draft.poster ? 'Replace poster' : 'Add a poster'}
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => void onPoster(e.target.files?.[0])} />
+              </label>
+              {draft.poster && (
+                <div className="mt-3 flex items-center gap-4">
+                  <img src={draft.poster} alt="" className="h-28 w-20 object-cover" />
+                  <GhostButton onClick={() => set({ poster: '' })}>REMOVE POSTER</GhostButton>
+                </div>
+              )}
+            </div>
+            <div className="mt-6 grid gap-4 border-t border-club-ink/10 pt-5 md:grid-cols-2">
+              <div>
+                <CheckField label="Let companies ask to sponsor this event" checked={draft.sponsorshipOpen} onChange={(v) => set({ sponsorshipOpen: v })} />
+              </div>
+              <AreaField label="Sponsors (shown on the event page)" rows={3} value={draft.sponsors} onChange={(v) => set({ sponsors: v })} hint="One name per line" />
             </div>
             <div className="mt-4 grid gap-4">
               <AreaField label="Description" value={draft.text} onChange={(v) => set({ text: v })} />
@@ -134,9 +180,10 @@ export default function AdminEvents() {
         </table>
         {items.length === 0 && <div className="p-10 text-center text-sm text-club-ink/70">No events yet. Add the first one.</div>}
       </div>
+      <EventInbox />
       {canDelete && (
         <div className="mt-6 flex items-center gap-4">
-          <DeleteButton label="RESET TO PROPOSED PROGRAMME" onConfirm={() => { reset(); flash(true, 'Events reset to the Captain’s proposed programme.'); }} />
+          <DeleteButton label="RESET TO CLUB PROGRAMME" onConfirm={() => { reset(); flash(true, 'Events reset to the club programme.'); }} />
         </div>
       )}
       <StorageNote />
