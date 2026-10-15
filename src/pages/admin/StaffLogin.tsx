@@ -3,36 +3,15 @@ import { useLocation } from 'wouter';
 import { ArrowUpRight, LockKeyhole } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { SectionLabel } from '@/components/layout/Shared';
-import { isStaffRole, useAuth } from '@/lib/auth';
 
 /**
  * Entry point to the admin portal for club staff.
- * With the backend configured this is a real sign-in and only accounts with a staff
- * role get in. Without it (demo mode) any details open the portal.
+ * Demo only: there is no real authentication yet, so any details open the portal.
+ * Real staff sign-in (with roles) arrives with the backend phase.
  */
 export default function StaffLogin() {
   const [, navigate] = useLocation();
-  const auth = useAuth();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!auth.configured) { navigate('/admin'); return; }
-    setBusy(true);
-    setError('');
-    const result = await auth.signIn(email, password);
-    if (result.error) { setBusy(false); return setError(result.error); }
-    if (!isStaffRole(result.profile?.role)) {
-      await auth.signOut();
-      setBusy(false);
-      return setError('This account does not have staff access. Members sign in from the Member Login page.');
-    }
-    setBusy(false);
-    navigate('/admin');
-  }
   return (
     <div className="min-h-dvh bg-club-ink text-club-white">
       <Header />
@@ -43,22 +22,20 @@ export default function StaffLogin() {
           <p className="mt-7 max-w-sm text-base leading-7 text-white/65">Manage events, bookings, the course, facilities and the gallery.</p>
         </div>
         <div className="bg-club-white p-7 text-club-ink md:p-10">
-          <form onSubmit={(e) => void onSubmit(e)} className="grid gap-5">
+          <form onSubmit={(e) => { e.preventDefault(); navigate('/admin'); }} className="grid gap-5">
             <div>
               <label htmlFor="staff-email" className="font-mono-club text-[9px] tracking-[.15em] text-club-ink/70">STAFF EMAIL</label>
               <input id="staff-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@chinhoyicountryclub.co.zw" className="mt-2 w-full border border-club-ink/20 bg-transparent px-4 py-4 text-sm outline-none placeholder:text-club-ink/50 focus:border-club-green" data-testid="input-staff-email" />
             </div>
             <div>
               <label htmlFor="staff-password" className="font-mono-club text-[9px] tracking-[.15em] text-club-ink/70">PASSWORD</label>
-              <input id="staff-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Your password" className="mt-2 w-full border border-club-ink/20 bg-transparent px-4 py-4 text-sm outline-none placeholder:text-club-ink/50 focus:border-club-green" data-testid="input-staff-password" />
+              <input id="staff-password" type="password" required placeholder="Your password" className="mt-2 w-full border border-club-ink/20 bg-transparent px-4 py-4 text-sm outline-none placeholder:text-club-ink/50 focus:border-club-green" data-testid="input-staff-password" />
             </div>
-            <button type="submit" disabled={busy} className="mt-2 flex items-center justify-center gap-2 bg-club-green py-4 disabled:opacity-60 text-[10px] font-bold tracking-[.15em] text-club-white hover:bg-club-ink" data-testid="button-staff-login">
-              {busy ? 'SIGNING IN…' : 'SIGN IN'} <ArrowUpRight size={14} />
+            <button type="submit" className="mt-2 flex items-center justify-center gap-2 bg-club-green py-4 text-[10px] font-bold tracking-[.15em] text-club-white hover:bg-club-ink" data-testid="button-staff-login">
+              SIGN IN <ArrowUpRight size={14} />
             </button>
-            {error && <p role="alert" className="text-xs text-club-alert" data-testid="staff-login-error">{error}</p>}
             <p className="flex items-center gap-2 border-t border-club-ink/10 pt-5 text-[11px] leading-5 text-club-ink/70">
-              <LockKeyhole size={12} className="shrink-0" />
-              {auth.configured ? 'Staff accounts are created by the club administrator.' : 'Preview: any details open the portal. Secure staff accounts are added when the club goes live.'}
+              <LockKeyhole size={12} className="shrink-0" /> Preview: any details open the portal. Secure staff accounts with roles are added when the club goes live.
             </p>
           </form>
         </div>
