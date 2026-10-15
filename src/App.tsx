@@ -4,6 +4,9 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { DemoBanner } from '@/components/layout/DemoBanner';
+import { RemoteErrorBanner } from '@/components/layout/RemoteErrorBanner';
+import { RequireMember, RequireStaff } from '@/components/auth/RequireAuth';
+import { AuthProvider } from '@/lib/auth';
 
 import Home from '@/pages/Home';
 import About from '@/pages/About';
@@ -33,6 +36,19 @@ import StaffLogin from '@/pages/admin/StaffLogin';
 
 const queryClient = new QueryClient();
 
+/** Wraps a page so only staff can open it. */
+const staff = (Page: React.ComponentType) => function StaffPage() { return <RequireStaff><Page /></RequireStaff>; };
+/** Wraps a page so only signed-in members can open it. */
+const member = (Page: React.ComponentType) => function MemberPage() { return <RequireMember><Page /></RequireMember>; };
+
+const GuardedAdmin = staff(AdminWorkspace);
+const GuardedDashboard = member(MemberDashboard);
+const GuardedTeeTimes = member(MemberTeeTimes);
+const GuardedMembership = member(MemberMembership);
+const GuardedCompetitions = member(MemberCompetitions);
+const GuardedPayments = member(MemberPayments);
+const GuardedProfile = member(MemberProfile);
+
 function Router() {
   return (
     <ErrorBoundary resetKey={useLocation()[0]}>
@@ -53,27 +69,27 @@ function Router() {
         <Route path="/member-login" component={MemberLogin} />
         <Route path="/member/login" component={MemberLogin} />
         <Route path="/member/register" component={MemberRegister} />
-        <Route path="/member/dashboard" component={MemberDashboard} />
-        <Route path="/member/tee-times" component={MemberTeeTimes} />
-        <Route path="/member/membership" component={MemberMembership} />
-        <Route path="/member/competitions" component={MemberCompetitions} />
-        <Route path="/member/payments" component={MemberPayments} />
-        <Route path="/member/profile" component={MemberProfile} />
+        <Route path="/member/dashboard" component={GuardedDashboard} />
+        <Route path="/member/tee-times" component={GuardedTeeTimes} />
+        <Route path="/member/membership" component={GuardedMembership} />
+        <Route path="/member/competitions" component={GuardedCompetitions} />
+        <Route path="/member/payments" component={GuardedPayments} />
+        <Route path="/member/profile" component={GuardedProfile} />
 
         <Route path="/staff-login" component={StaffLogin} />
-        <Route path="/admin" component={AdminWorkspace} />
-        <Route path="/admin/tee-sheet" component={AdminWorkspace} />
-        <Route path="/admin/bookings" component={AdminWorkspace} />
-        <Route path="/admin/course" component={AdminWorkspace} />
-        <Route path="/admin/events" component={AdminWorkspace} />
-        <Route path="/admin/memberships" component={AdminWorkspace} />
-        <Route path="/admin/gallery" component={AdminWorkspace} />
-        <Route path="/admin/facilities" component={AdminWorkspace} />
-        <Route path="/admin/payments" component={AdminWorkspace} />
-        <Route path="/admin/analytics" component={AdminWorkspace} />
-        <Route path="/admin/users" component={AdminWorkspace} />
-        <Route path="/admin/activity" component={AdminWorkspace} />
-        <Route path="/admin/settings" component={AdminWorkspace} />
+        <Route path="/admin" component={GuardedAdmin} />
+        <Route path="/admin/tee-sheet" component={GuardedAdmin} />
+        <Route path="/admin/bookings" component={GuardedAdmin} />
+        <Route path="/admin/course" component={GuardedAdmin} />
+        <Route path="/admin/events" component={GuardedAdmin} />
+        <Route path="/admin/memberships" component={GuardedAdmin} />
+        <Route path="/admin/gallery" component={GuardedAdmin} />
+        <Route path="/admin/facilities" component={GuardedAdmin} />
+        <Route path="/admin/payments" component={GuardedAdmin} />
+        <Route path="/admin/analytics" component={GuardedAdmin} />
+        <Route path="/admin/users" component={GuardedAdmin} />
+        <Route path="/admin/activity" component={GuardedAdmin} />
+        <Route path="/admin/settings" component={GuardedAdmin} />
 
         <Route component={NotFound} />
       </Switch>
@@ -84,13 +100,16 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <AuthProvider>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
           <Router />
         </WouterRouter>
         <Toaster />
         <DemoBanner />
+        <RemoteErrorBanner />
       </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
