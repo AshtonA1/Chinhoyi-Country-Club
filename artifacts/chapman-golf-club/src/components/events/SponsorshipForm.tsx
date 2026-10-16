@@ -3,6 +3,7 @@ import { CircleCheck } from 'lucide-react';
 import type { EventItem, SponsorshipRequest } from '@/data/club';
 import { useSponsorRequests } from '@/lib/club-data';
 import { makeId } from '@/lib/format';
+import { GUARD_MESSAGE, useFormGuard } from '@/lib/formGuard';
 
 const field = 'mt-2 w-full border border-club-ink/20 bg-white px-3 py-3 text-sm text-club-ink outline-none placeholder:text-club-ink/50 focus:border-club-green';
 const label = 'font-mono-club text-[9px] tracking-[.14em] text-club-ink/70';
@@ -11,6 +12,7 @@ const INTERESTS = ['Title sponsor', 'Prize sponsor', 'Hole sponsor', 'Refreshmen
 /** A company asks to sponsor the event; the club follows up. */
 export function SponsorshipForm({ event }: { event: EventItem }) {
   const { add } = useSponsorRequests();
+  const guard = useFormGuard();
   const [company, setCompany] = useState('');
   const [contactName, setContactName] = useState('');
   const [phone, setPhone] = useState('');
@@ -22,6 +24,7 @@ export function SponsorshipForm({ event }: { event: EventItem }) {
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (guard.verdict() !== 'ok') return setError(GUARD_MESSAGE);
     if (!company.trim() || !contactName.trim()) return setError('Enter your company and your name.');
     if (phone.trim().length < 7 && !email.includes('@')) return setError('Enter a phone number or an email address so the club can reply.');
     const request: SponsorshipRequest = {
@@ -46,6 +49,7 @@ export function SponsorshipForm({ event }: { event: EventItem }) {
 
   return (
     <form onSubmit={submit} className="border border-club-ink/10 bg-white p-6 md:p-8" data-testid="form-sponsorship">
+      {guard.field}
       <p className="font-mono-club text-[9px] tracking-[.15em] text-club-green">SPONSORSHIP</p>
       <h3 className="font-display mt-2 text-3xl text-club-ink">Sponsor this event.</h3>
       <p className="mt-3 text-sm leading-6 text-club-ink/70">Tell the club what you would like to sponsor and how to reach you. Sponsorship terms are agreed with the club directly.</p>

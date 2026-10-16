@@ -8,6 +8,7 @@ import { paymentsEnabled } from '@/lib/supabase';
 import { PaymentPanel } from '@/components/events/PaymentPanel';
 import { CalendarButton, DownloadPdfButton } from '@/components/DownloadButtons';
 import { eventEntryDocument } from '@/lib/documents';
+import { GUARD_MESSAGE, useFormGuard } from '@/lib/formGuard';
 import { clubEventIcs } from '@/lib/ics';
 
 const field = 'mt-2 w-full border border-club-ink/20 bg-white px-3 py-3 text-sm text-club-ink outline-none placeholder:text-club-ink/50 focus:border-club-green';
@@ -16,6 +17,7 @@ const label = 'font-mono-club text-[9px] tracking-[.14em] text-club-ink/70';
 /** Online entry for an event: one player, or a team of four. */
 export function EventEntryForm({ event }: { event: EventItem }) {
   const { add } = useEventEntries();
+  const guard = useFormGuard();
   const offers: { id: EntryFormat; name: string; price: number }[] = [];
   if (event.singlePrice !== undefined) offers.push({ id: 'single', name: 'Single player', price: event.singlePrice });
   if (event.fourBallPrice !== undefined) offers.push({ id: 'fourball', name: 'Four-ball (team of four)', price: event.fourBallPrice });
@@ -34,6 +36,7 @@ export function EventEntryForm({ event }: { event: EventItem }) {
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (guard.verdict() !== 'ok') return setError(GUARD_MESSAGE);
     if (!name.trim()) return setError('Enter your name.');
     if (phone.trim().length < 7) return setError('Enter a phone number the club can reach you on.');
     if (!email.includes('@')) return setError('Enter a valid email address.');
@@ -83,6 +86,7 @@ export function EventEntryForm({ event }: { event: EventItem }) {
 
   return (
     <form onSubmit={submit} className="border border-club-ink/10 bg-white p-6 md:p-8" data-testid="form-event-entry">
+      {guard.field}
       <p className="font-mono-club text-[9px] tracking-[.15em] text-club-green">ENTER ONLINE</p>
       <h3 className="font-display mt-2 text-3xl text-club-ink">Enter this event.</h3>
       <div className="mt-6 grid gap-3 sm:grid-cols-2">

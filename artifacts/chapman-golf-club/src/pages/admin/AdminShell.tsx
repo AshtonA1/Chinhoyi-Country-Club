@@ -2,7 +2,7 @@ import { type ReactNode, useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import {
   Activity, CalendarCheck, CalendarDays, ClipboardList, Compass, CreditCard, Image as ImageIcon,
-  LayoutDashboard, LogOut, Menu, Settings, ShieldCheck, Shapes, Users, X, BarChart3,
+  LayoutDashboard, LogOut, Mail, Menu, Settings, ShieldCheck, Shapes, Users, X, BarChart3,
 } from 'lucide-react';
 import { SampleChip } from '@/components/layout/Portal';
 import { sampleAdmin } from '@/data/sample';
@@ -19,6 +19,7 @@ export const adminNav = [
   { label: 'Gallery & stories', href: '/admin/gallery', icon: ImageIcon },
   { label: 'Facilities', href: '/admin/facilities', icon: Shapes },
   { label: 'Payments', href: '/admin/payments', icon: CreditCard },
+  { label: 'Emails', href: '/admin/emails', icon: Mail },
   { label: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { label: 'Users & roles', href: '/admin/users', icon: Users },
   { label: 'Activity logs', href: '/admin/activity', icon: Activity },

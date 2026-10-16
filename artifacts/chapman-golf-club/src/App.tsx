@@ -20,6 +20,7 @@ import Facilities from '@/pages/Facilities';
 import Gallery from '@/pages/Gallery';
 import GolfInfo from '@/pages/GolfInfo';
 import PaymentReturn from '@/pages/PaymentReturn';
+import Unsubscribe from '@/pages/Unsubscribe';
 import Contact from '@/pages/Contact';
 import NotFound from '@/pages/not-found';
 
@@ -67,6 +68,7 @@ function Router() {
         <Route path="/golf-info" component={GolfInfo} />
         <Route path="/contact" component={Contact} />
         <Route path="/pay/return" component={PaymentReturn} />
+        <Route path="/unsubscribe" component={Unsubscribe} />
 
         <Route path="/member-login" component={MemberLogin} />
         <Route path="/member/login" component={MemberLogin} />
@@ -88,6 +90,7 @@ function Router() {
         <Route path="/admin/gallery" component={GuardedAdmin} />
         <Route path="/admin/facilities" component={GuardedAdmin} />
         <Route path="/admin/payments" component={GuardedAdmin} />
+        <Route path="/admin/emails" component={GuardedAdmin} />
         <Route path="/admin/analytics" component={GuardedAdmin} />
         <Route path="/admin/users" component={GuardedAdmin} />
         <Route path="/admin/activity" component={GuardedAdmin} />

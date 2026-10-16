@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { CircleCheck, ImagePlus, X } from 'lucide-react';
 import type { ClubStory } from '@/data/club';
+import { GUARD_MESSAGE, useFormGuard } from '@/lib/formGuard';
 import { resizeImage } from '@/lib/image';
 import { useLocalCollection } from '@/lib/local-store';
 
 export function StorySubmissionForm({ onClose }: { onClose: () => void }) {
   const { add } = useLocalCollection<ClubStory>('chapman:club-stories');
+  const guard = useFormGuard();
   const [memberName, setMemberName] = useState('');
   const [score, setScore] = useState('');
   const [description, setDescription] = useState('');
@@ -27,6 +29,7 @@ export function StorySubmissionForm({ onClose }: { onClose: () => void }) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (guard.verdict() !== 'ok') { setError(GUARD_MESSAGE); return; }
     const saved = add({
       id: crypto.randomUUID(),
       memberName,
@@ -62,6 +65,7 @@ export function StorySubmissionForm({ onClose }: { onClose: () => void }) {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="grid gap-5">
+            {guard.field}
             <div>
               <h3 className="font-display text-3xl text-club-ink">Share your round.</h3>
               <p className="mt-2 text-sm text-club-ink/70">Submissions are reviewed by our team before appearing publicly.</p>

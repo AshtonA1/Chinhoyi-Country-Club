@@ -9,6 +9,7 @@ import AdminCourse from './AdminCourse';
 import AdminEvents from './AdminEvents';
 import AdminFacilities from './AdminFacilities';
 import AdminSettings from './AdminSettings';
+import AdminEmails from './AdminEmails';
 import NotFound from '@/pages/not-found';
 
 export default function AdminWorkspace() {
@@ -24,6 +25,7 @@ export default function AdminWorkspace() {
   if (section === 'events') return <AdminEvents />;
   if (section === 'facilities') return <AdminFacilities />;
   if (section === 'settings') return <AdminSettings />;
+  if (section === 'emails') return <AdminEmails />;
   if (['memberships', 'payments', 'analytics', 'activity'].includes(section)) return <AdminResource section={section} />;
   return <NotFound />;
 }
